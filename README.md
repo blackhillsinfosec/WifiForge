@@ -24,7 +24,7 @@
     <a target="_blank" href="https://www.blackhillsinfosec.com/wifi-forge/" rel="dofollow"><strong>Blog Post</strong></a>
   </h4>
 </div>
-
+<hr>
 <a href="https://blackhillsinfosec.com"><img width="75%" height="75%" src="https://github.com/her3ticAVI/MiniNet-framework/blob/main/images/wififorge-running.png" alt="Wifi Forge Running" /></a>
 
 ## Disclaimer/Notes
