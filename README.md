@@ -27,8 +27,6 @@
 <hr>
 <a href="https://blackhillsinfosec.com"><img width="75%" height="75%" src="https://github.com/her3ticAVI/MiniNet-framework/blob/main/images/wififorge-running.png" alt="Wifi Forge Running" /></a>
 
-<div align="left">
-
 ## Disclaimer/Notes
 
 The installation script will only run on Ubuntu, Parrot, or Kali. 
@@ -69,4 +67,4 @@ https://mininet-wifi.github.io/
 [https://www.aircrack-ng.org/doku.php?id=cracking_wpa](https://www.aircrack-ng.org/doku.php?id=cracking_wpa)
 [https://charlesreid1.com/wiki/Aircrack_and_John_the_Ripper](https://charlesreid1.com/wiki/Aircrack_and_John_the_Ripper)
 
-Brought to you by Black Hills Infosec with love ♡
+Made with ❤️ by Black Hills Infosec
