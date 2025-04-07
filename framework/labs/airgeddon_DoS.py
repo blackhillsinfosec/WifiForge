@@ -1,14 +1,15 @@
 from mininet.node import Controller
 from mn_wifi.cli import CLI
 from mn_wifi.net import Mininet_wifi
-from helper_functions.CONNECT_TMUX import CONFIG_TMUX
+from framework.helper_functions.CONNECT_TMUX import CONFIG_TMUX
 import os
 
-def PACKET_CAPTURE_HCCAPX_AND_HASHCAT():
+
+def Airgeddon_DoS():
     net = Mininet_wifi()
 
     print('Creating Stations')
-    attacker = net.addStation('Attacker', wlans=1)
+    attacker = net.addStation('Attacker', wlans=2)
 
     #secure_wifi
     host1 = net.addStation('host1', passwd='123456789a', encrypt='wep')
@@ -34,7 +35,7 @@ def PACKET_CAPTURE_HCCAPX_AND_HASHCAT():
     ap3 = net.addAccessPoint('ap3', ssid='FBI_Van', passwd='supersecurepassword', encrypt='wpa2', mode='g', channel='1')
 
 
-    #Hidden_SSID
+    #Hidden_SSID - doesn't work as of 6/14
     host9 = net.addStation('host9', passwd='iamhidden', encrypt='wpa2')
     ap4 = net.addAccessPoint('ap4', ssid='cantseeme', passwd='iamhidden', encrypt='wpa2', mode='g', channel='11')
        
@@ -61,9 +62,8 @@ def PACKET_CAPTURE_HCCAPX_AND_HASHCAT():
     ap1.start([])
     ap2.start([])
     ap3.start([])
-    ap4.start([])
-    
-    CONFIG_TMUX(["Attacker", "host_machine"], "HCCAPX_HASHCAT")
+
+    CONFIG_TMUX(["Attacker"], "BETTERCAP")
     
     net.stop()
     os.system("clear")

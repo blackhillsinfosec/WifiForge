@@ -1,10 +1,10 @@
 from mininet.node import Controller
 from mn_wifi.cli import CLI
 from mn_wifi.net import Mininet_wifi
-from helper_functions.CONNECT_TMUX import CONFIG_TMUX
+from framework.helper_functions.CONNECT_TMUX import CONFIG_TMUX
 import os
 
-def AIRSUITE_RECON_AND_KEY_DISCOVERY():
+def BETTERCAP_RECON():
     net = Mininet_wifi()
 
     print('Creating Stations')
@@ -17,9 +17,9 @@ def AIRSUITE_RECON_AND_KEY_DISCOVERY():
                              passwd='123456789a', encrypt='wep',
                              failMode="standalone", datapath='user')
     #WPA-LAB
-    host3 = net.addStation('host2', passwd='december2022', encrypt='wpa2')
-    host4 = net.addStation('host3', passwd='december2022', encrypt='wpa2')
-    ap1 = net.addAccessPoint('ap1', ssid='WPA2_Network', passwd='december2022', encrypt='wpa2', mode='g', channel='6')
+    host3 = net.addStation('host3', passwd='december2022', encrypt='wpa2')
+    host4 = net.addStation('host4', passwd='december2022', encrypt='wpa2')
+    ap1 = net.addAccessPoint('ap1', ssid='WPA2_Network', passwd='december2022', encrypt='wpa2', mode='g', channel='6', mac="76:df:71:67:40:2b")
 
 
     #Harlow_Home
@@ -63,7 +63,7 @@ def AIRSUITE_RECON_AND_KEY_DISCOVERY():
     ap3.start([])
     ap4.start([])
     
-    CONFIG_TMUX(["Attacker", "Attacker"], "AIRSUITE_RECON")
+    CONFIG_TMUX(["Attacker"], "BETTERCAP")
 
     net.stop()
     os.system("clear")

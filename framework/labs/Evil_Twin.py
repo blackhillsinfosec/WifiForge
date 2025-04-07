@@ -1,14 +1,14 @@
 from mininet.net import Mininet
 from mn_wifi.cli import CLI
 from mn_wifi.net import Mininet_wifi
-from helper_functions.CONNECT_TMUX import CONFIG_TMUX
+from framework.helper_functions.CONNECT_TMUX import CONFIG_TMUX
 import os
 '''
 Estbalish an environment for learning WEP attacks
 See original script here: https://hackmd.io/@ramonfontes/cracking_wep
 '''
 
-def EAPHAMMER_CRED_CAPTURE():
+def EVIL_TWIN():
 	net = Mininet_wifi()
 
 	print("Creating Stations...")

@@ -1,9 +1,9 @@
 from mininet.term import makeTerm
 from mn_wifi.net import Mininet_wifi
-from helper_functions.CONNECT_TMUX import CONFIG_TMUX
+from framework.helper_functions.CONNECT_TMUX import CONFIG_TMUX
 import os
 
-def WPS_NETWORK():
+def WPS_PIXIE_DUST_ATTACK():
     net = Mininet_wifi()
 
     print("Creating Stations...")

@@ -1,15 +1,14 @@
 from mininet.node import Controller
 from mn_wifi.cli import CLI
 from mn_wifi.net import Mininet_wifi
-from helper_functions.CONNECT_TMUX import CONFIG_TMUX
+from framework.helper_functions.CONNECT_TMUX import CONFIG_TMUX
 import os
 
-
-def Airgeddon_DoS():
+def BETTERCAP_WIFI_AUTH_CAPTURE():
     net = Mininet_wifi()
 
     print('Creating Stations')
-    attacker = net.addStation('Attacker', wlans=2)
+    attacker = net.addStation('Attacker', wlans=1)
 
     #secure_wifi
     host1 = net.addStation('host1', passwd='123456789a', encrypt='wep')
@@ -18,9 +17,9 @@ def Airgeddon_DoS():
                              passwd='123456789a', encrypt='wep',
                              failMode="standalone", datapath='user')
     #WPA-LAB
-    host3 = net.addStation('host3', passwd='december2022', encrypt='wpa2')
-    host4 = net.addStation('host4', passwd='december2022', encrypt='wpa2')
-    ap1 = net.addAccessPoint('ap1', ssid='WPA2_Network', passwd='december2022', encrypt='wpa2', mode='g', channel='6')
+    host3 = net.addStation('host1', passwd='december2022', encrypt='wpa2')
+    host4 = net.addStation('host2', passwd='december2022', encrypt='wpa2')
+    ap1 = net.addAccessPoint('ap1', ssid='WPA2_Network', passwd='december2022', encrypt='wpa2', mode='g', channel='6', mac="76:df:71:67:40:2b")
 
 
     #Harlow_Home
@@ -35,7 +34,7 @@ def Airgeddon_DoS():
     ap3 = net.addAccessPoint('ap3', ssid='FBI_Van', passwd='supersecurepassword', encrypt='wpa2', mode='g', channel='1')
 
 
-    #Hidden_SSID - doesn't work as of 6/14
+    #Hidden_SSID
     host9 = net.addStation('host9', passwd='iamhidden', encrypt='wpa2')
     ap4 = net.addAccessPoint('ap4', ssid='cantseeme', passwd='iamhidden', encrypt='wpa2', mode='g', channel='11')
        
@@ -62,8 +61,9 @@ def Airgeddon_DoS():
     ap1.start([])
     ap2.start([])
     ap3.start([])
+    ap4.start([])
 
-    CONFIG_TMUX(["Attacker"], "BETTERCAP")
     
+    CONFIG_TMUX(["Attacker"], "BETTERCAP_AUTH_CAP")
     net.stop()
     os.system("clear")

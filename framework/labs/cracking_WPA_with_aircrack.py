@@ -1,10 +1,8 @@
-from mininet.node import Controller
-from mn_wifi.cli import CLI
 from mn_wifi.net import Mininet_wifi
-from helper_functions.CONNECT_TMUX import CONFIG_TMUX
+from framework.helper_functions.CONNECT_TMUX import CONFIG_TMUX
 import os
 
-def BETTERCAP_WIFI_AUTH_CAPTURE():
+def CRACKING_WPA_WITH_AIRCRACK():
     net = Mininet_wifi()
 
     print('Creating Stations')
@@ -19,7 +17,7 @@ def BETTERCAP_WIFI_AUTH_CAPTURE():
     #WPA-LAB
     host3 = net.addStation('host1', passwd='december2022', encrypt='wpa2')
     host4 = net.addStation('host2', passwd='december2022', encrypt='wpa2')
-    ap1 = net.addAccessPoint('ap1', ssid='WPA2_Network', passwd='december2022', encrypt='wpa2', mode='g', channel='6', mac="76:df:71:67:40:2b")
+    ap1 = net.addAccessPoint('ap1', ssid='WPA2_Network', passwd='december2022', encrypt='wpa2', mode='g', channel='6')
 
 
     #Harlow_Home
@@ -62,8 +60,8 @@ def BETTERCAP_WIFI_AUTH_CAPTURE():
     ap2.start([])
     ap3.start([])
     ap4.start([])
-
     
-    CONFIG_TMUX(["Attacker"], "BETTERCAP_AUTH_CAP")
+    CONFIG_TMUX(["Attacker"], "WPA_CRACK")
+
     net.stop()
     os.system("clear")
