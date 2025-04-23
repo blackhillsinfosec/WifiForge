@@ -78,4 +78,4 @@ run_command "sudo ln /usr/bin/ovs-testcontroller /usr/bin/controller" "Configuri
 run_command "sudo service openvswitch-switch start" "Starting Openvswitch..."
 run_command "sudo cp ./main_menu /bin" "Copying Files to Bin..."
 
-echo -e "WifiForge Finished Installing!"
+echo -e "WifiForge Finished Installing!🎉"
