@@ -53,8 +53,6 @@ run_command "git config --global --add safe.directory \"$truncated_cwd\"" "Addin
 # Initialize Submodules
 run_command "git submodule init" "Initializing Submodules..."
 
-run_command "sudo pip install requirements.txt" "Installing requirements.txt..."
-
 # Update Submodules
 run_command "git submodule update" "Updating Submodules..."
 
