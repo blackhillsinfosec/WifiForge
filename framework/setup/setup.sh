@@ -76,6 +76,7 @@ run_command "sudo make install" "Compiling..."
 run_command "sudo apt install openvswitch-testcontroller -y" "Installing Openvswitch..."
 run_command "sudo ln /usr/bin/ovs-testcontroller /usr/bin/controller" "Configuring Controller..."
 run_command "sudo service openvswitch-switch start" "Starting Openvswitch..."
-run_command "sudo cp ./main_menu /bin" "Copying Files to Bin..."
+run_command "sudo cp ./main_menu /usr/bin" "Copying Files to Bin..."
+run_command "sudo chmod +x /usr/bin/main_menu" "Adjusting main_menu Privelleges..."
 
 echo -e "WifiForge Finished Installing!🎉"
