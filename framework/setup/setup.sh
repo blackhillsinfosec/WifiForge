@@ -48,7 +48,7 @@ run_command() {
 }
 
 # Adding Submodules to safe.directory
-run_command "git config --global --add safe.directory \"$truncated_cwd\"" "Adding Submodules to safe.directory..."
+run_command "git config --global --add safe.directory "$truncated_cwd"" "Adding Submodules to safe.directory..."
 
 # Initialize Submodules
 run_command "git submodule init" "Initializing Submodules..."
@@ -71,5 +71,10 @@ run_command "../mininet-wifi/util/install.sh -Wlnf" "Running Install Script..."
 
 # Compile
 run_command "sudo make install" "Compiling..."
+
+run_command "sudo apt install openvswitch-testcontroller -y" "Installing Openvswitch..."
+run_command "sudo ln /usr/bin/ovs-testcontroller /usr/bin/controller" "Configuring Controller..."
+run_command "sudo service openvswitch-switch start" "Starting Openvswitch..."
+run_command "sudo cp ./main_menu /bin" "Copying Files to Bin..."
 
 echo -e "WifiForge Finished Installing!"
