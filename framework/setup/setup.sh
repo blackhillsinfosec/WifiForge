@@ -57,7 +57,7 @@ run_command "git submodule init" "Initializing Submodules..."
 run_command "git submodule update" "Updating Submodules..."
 
 # Set global pip variable to break system packages
-run_command "sudo -E python3 -m pip config set global.break-system-packages true" "Configuring pip..."
+run_command "sudo -E pip install -r requirements.txt --break-system-packages" "Configuring pip..."
 
 # Install Kali Tools
 run_command "sudo apt update -y" "Updating package list..."
