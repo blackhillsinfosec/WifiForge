@@ -29,7 +29,7 @@ def NTLM_JOHN_CRACK():
 	CONFIG_TMUX(["Attacker"], "NTLM_JOHN_CRACK")
 
 	net.stop()
-	os.system("rm /Wifi-Forge/framework/loot/4whs.pot")
+	os.system("rm /WifiForge/framework/loot/4whs.pot")
 	os.system("clear")
 
 
