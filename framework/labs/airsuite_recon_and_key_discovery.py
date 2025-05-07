@@ -2,9 +2,12 @@ from mininet.node import Controller
 from mn_wifi.cli import CLI
 from mn_wifi.net import Mininet_wifi
 from framework.helper_functions.CONNECT_TMUX import CONFIG_TMUX
+from halo import Halo
 import os
 
 def AIRSUITE_RECON_AND_KEY_DISCOVERY():
+    spin = Halo(text='Loading', spinner='dots')
+    spin.start()
     net = Mininet_wifi()
 
     print('Creating Stations')
@@ -62,8 +65,9 @@ def AIRSUITE_RECON_AND_KEY_DISCOVERY():
     ap2.start([])
     ap3.start([])
     ap4.start([])
-    
+    spin.stop()
     CONFIG_TMUX(["Attacker", "Attacker"], "AIRSUITE_RECON")
-
+    spin.start()
     net.stop()
+    spin.stop()
     os.system("clear")

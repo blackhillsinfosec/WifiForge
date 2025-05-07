@@ -1,16 +1,17 @@
-from mininet.log import setLogLevel, info
 from mn_wifi.cli import CLI
 from mn_wifi.net import Mininet_wifi
 from framework.helper_functions.CONNECT_TMUX import CONFIG_TMUX
 from time import sleep
 from WifiForge import print_banner
+from halo import Halo
 import os
 
 def WEP_ATTACK():
 
     # BUILD NETWORK 
+    spin = Halo(text='Loading', spinner='dots')
+    spin.start()
 
-    setLogLevel('info')
     net = Mininet_wifi()
 
     print("Creating Stations...")
@@ -30,9 +31,11 @@ def WEP_ATTACK():
 
     net.build()
     ap1.start([])
-    
+    spin.stop()
     CONFIG_TMUX(['Attacker', 'host1', 'host2'], "WEP_ATTACK")
 
     #KILL LAB
-    os.system('clear')
+    spin.start()
     net.stop()
+    spin.stop()
+    os.system('clear')

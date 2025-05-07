@@ -2,9 +2,13 @@ from mininet.node import Controller
 from mn_wifi.cli import CLI
 from mn_wifi.net import Mininet_wifi
 from framework.helper_functions.CONNECT_TMUX import CONFIG_TMUX
+from halo import Halo
 import os
 
 def BETTERCAP_RECON():
+    spin = Halo(text='Loading', spinner='dots')
+    spin.start()
+
     net = Mininet_wifi()
 
     print('Creating Stations')
@@ -62,8 +66,10 @@ def BETTERCAP_RECON():
     ap2.start([])
     ap3.start([])
     ap4.start([])
-    
+    spin.stop()
     CONFIG_TMUX(["Attacker"], "BETTERCAP")
 
+    spin.start()
     net.stop()
+    spin.stop()
     os.system("clear")

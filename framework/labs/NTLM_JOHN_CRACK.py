@@ -1,6 +1,7 @@
 from mn_wifi.cli import CLI
 from mn_wifi.net import Mininet_wifi
 from framework.helper_functions.CONNECT_TMUX import CONFIG_TMUX
+from halo import Halo
 import os
 '''
 Estbalish an environment for learning WEP attacks
@@ -8,6 +9,8 @@ See original script here: https://hackmd.io/@ramonfontes/cracking_wep
 '''
 
 def NTLM_JOHN_CRACK():
+	spin = Halo(text='Loading', spinner='dots')
+	spin.start()
 	net = Mininet_wifi()
 
 	print("Creating Stations...")
@@ -25,10 +28,11 @@ def NTLM_JOHN_CRACK():
 
 	net.build()
 	ap1.start([])
-
+	spin.stop()
 	CONFIG_TMUX(["Attacker"], "NTLM_JOHN_CRACK")
-
+	spin.start()
 	net.stop()
+	spin.stop()
 	os.system("rm /WifiForge/framework/loot/4whs.pot")
 	os.system("clear")
 

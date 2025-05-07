@@ -53,6 +53,7 @@ def CONFIG_TMUX(nodes, lab_name):
     subprocess.Popen(["tmux", "kill-session", "-t", session_name], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 
-
+#def INIT_NETWORK():
+#	print("tEST")
 
 

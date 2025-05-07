@@ -1,9 +1,14 @@
 from mn_wifi.cli import CLI
 from mn_wifi.net import Mininet_wifi
 from framework.helper_functions.CONNECT_TMUX import CONFIG_TMUX
+import threading
+import time
+from halo import Halo
 import os
 
 def WIFIPHISHER():
+    spin = Halo(text='Loading', spinner='dots')
+    spin.start()
     net = Mininet_wifi()
 
     print('Creating Stations...')
@@ -22,9 +27,10 @@ def WIFIPHISHER():
 
     net.build()
     ap.start([])
-    
+    spin.stop()
     CONFIG_TMUX(["Attacker", "host1"], "WIFIPHISHER")
-
+    spin.start()
     net.stop()
+    spin.stop()
     os.system("ps aux | grep 'wifiphisher' | awk '{print $2}' | xargs -I {} kill -9 {}")
     

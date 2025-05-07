@@ -2,10 +2,14 @@ from mininet.node import Controller
 from mn_wifi.cli import CLI
 from mn_wifi.net import Mininet_wifi
 from framework.helper_functions.CONNECT_TMUX import CONFIG_TMUX
+from halo import Halo
 import os
 
 def PACKET_CAPTURE_TO_HCCAPX_HASHCAT_CRACKING():
+    spin = Halo(text='Loading', spinner='dots')
+    spin.start()
     net = Mininet_wifi()
+    
 
     print('Creating Stations')
     attacker = net.addStation('Attacker', wlans=1)
@@ -62,8 +66,9 @@ def PACKET_CAPTURE_TO_HCCAPX_HASHCAT_CRACKING():
     ap2.start([])
     ap3.start([])
     ap4.start([])
-    
+    spin.stop()    
     CONFIG_TMUX(["Attacker", "host_machine"], "HCCAPX_HASHCAT")
-    
+    spin.start()
     net.stop()
+    spin.stop()
     os.system("clear")

@@ -1,9 +1,13 @@
 from mininet.term import makeTerm
 from mn_wifi.net import Mininet_wifi
 from framework.helper_functions.CONNECT_TMUX import CONFIG_TMUX
+from halo import Halo
 import os
 
 def WPS_PIXIE_DUST_ATTACK():
+    spin = Halo(text='Loading', spinner='dots')
+    spin.start()
+
     net = Mininet_wifi()
 
     print("Creating Stations...")
@@ -27,8 +31,9 @@ def WPS_PIXIE_DUST_ATTACK():
     ap1.cmd('hostapd_cli -i ap1-wlan1 wps_ap_pin set 12345670')
     attacker.cmd('iw dev a-wlan0 interface add mon0 type monitor')
     attacker.cmd('ip link set mon0 up')
-
+    spin.stop()
     CONFIG_TMUX(["Attacker", "host1"], "WPS")
-
+    spin.start()
     net.stop()
+    spin.stop()
     os.system("clear")

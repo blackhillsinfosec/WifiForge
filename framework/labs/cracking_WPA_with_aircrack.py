@@ -1,8 +1,12 @@
 from mn_wifi.net import Mininet_wifi
 from framework.helper_functions.CONNECT_TMUX import CONFIG_TMUX
+from halo import Halo
 import os
 
 def CRACKING_WPA_WITH_AIRCRACK():
+    spin = Halo(text='Loading', spinner='dots')
+    spin.start()
+
     net = Mininet_wifi()
 
     print('Creating Stations')
@@ -60,8 +64,9 @@ def CRACKING_WPA_WITH_AIRCRACK():
     ap2.start([])
     ap3.start([])
     ap4.start([])
-    
+    spin.stop()
     CONFIG_TMUX(["Attacker"], "WPA_CRACK")
-
+    spin.start()
     net.stop()
+    spin.stop()
     os.system("clear")

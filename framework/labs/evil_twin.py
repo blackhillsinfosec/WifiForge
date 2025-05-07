@@ -1,7 +1,9 @@
 from mininet.net import Mininet
 from mn_wifi.cli import CLI
 from mn_wifi.net import Mininet_wifi
+from halo import Halo
 from framework.helper_functions.CONNECT_TMUX import CONFIG_TMUX
+from halo import Halo
 import os
 '''
 Estbalish an environment for learning WEP attacks
@@ -9,6 +11,9 @@ See original script here: https://hackmd.io/@ramonfontes/cracking_wep
 '''
 
 def EVIL_TWIN():
+	spin = Halo(text='Loading', spinner='dots')
+	spin.start()
+
 	net = Mininet_wifi()
 
 	print("Creating Stations...")
@@ -25,10 +30,11 @@ def EVIL_TWIN():
 
 	net.build()
 	ap1.start([])
-
+	spin.stop()
 	CONFIG_TMUX(["Attacker"], "EVIL_TWIN")
-
+	spin.start()
 	net.stop()
+	spin.stop()
 	os.system("clear")
 
 

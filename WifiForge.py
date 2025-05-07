@@ -49,7 +49,7 @@ def import_module_and_get_function(file_path, module_name):
     spec = importlib.util.spec_from_file_location(module_name, file_path)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
-    functions = {name: func for name, func in inspect.getmembers(module, inspect.isfunction) if name not in ('print_banner', 'CONFIG_TMUX')}
+    functions = {name: func for name, func in inspect.getmembers(module, inspect.isfunction) if name not in ('print_banner', 'CONFIG_TMUX', 'INIT_NET')}
     return next(iter(functions.items()), (None, None))
 
 def load_functions_from_py_files(directory):
@@ -106,12 +106,14 @@ def main():
                 remove_old_variables()
                 sys.stdout = sys.__stdout__
             elif key.lower() == 'q':
-                exit(0)
-
-os.system("clear")
+                return
 
 if __name__ == "__main__":
-    main()
+    if os.geteuid() == 0:
+        os.system("clear")
+        main()
+        os.system("clear")
+    else:
+        print("WIFIFORGE must be run as root!")
+        exit(0)
 
-
-#test
