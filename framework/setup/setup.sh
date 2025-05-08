@@ -10,6 +10,18 @@ MAGENTA='\033[35m'
 CYAN='\033[36m'
 RESET='\033[0m'
 
+# OS Check
+os_name=$(lsb_release -si 2>/dev/null)
+os_version=$(lsb_release -sr 2>/dev/null)
+
+if [[ "$os_name" != "Kali" && "$os_name" != "Ubuntu" ]]; then
+    echo -e "${RED}✖ OS not supported... Please use the Docker container.${RESET}"
+    echo -e "${CYAN}Detected OS: ${os_name} ${os_version}${RESET}"
+    exit 1
+fi
+
+echo -e "${GREEN}✔ Detected supported OS: ${os_name} ${os_version}${RESET}"
+
 # Get current working directory
 cwd=$(pwd)
 
@@ -51,7 +63,7 @@ run_command "sudo apt update -y" "Updating package list..."
 run_command "sudo apt install -y ifupdown pip curl aircrack-ng john dsniff tmux git" "Installing required tools..."
 
 # Adding Submodules to safe.directory
-run_command "git config --global --add safe.directory "$truncated_cwd"" "Adding Submodules to safe.directory..."
+run_command "git config --global --add safe.directory \"$truncated_cwd\"" "Adding Submodules to safe.directory..."
 
 # Initialize Submodules
 run_command "git submodule init" "Initializing Submodules..."
@@ -79,4 +91,4 @@ run_command "sudo service openvswitch-switch start" "Starting Openvswitch..."
 run_command "sudo cp ./main_menu /usr/bin" "Copying Files to Bin..."
 run_command "sudo chmod +x /usr/bin/main_menu" "Adjusting main_menu Privelleges..."
 
-echo -e "WifiForge Finished Installing!🎉"
+echo -e "${MAGENTA}WifiForge Finished Installing! 🎉${RESET}"
