@@ -4,3 +4,4 @@ first_install_check
 mac80211_hwsim_mgmt
 openflow
 wmediumd
+*apconf
