@@ -27,24 +27,19 @@
 <hr>
 <a href="https://blackhillsinfosec.com"><img width="75%" height="75%" src="https://github.com/her3ticAVI/MiniNet-framework/blob/main/images/wififorge-running.png" alt="Wifi Forge Running" /></a>
 
-## Disclaimer/Notes
+## Disclaimer
 
-The installation script will only run on Ubuntu, Parrot, or Kali. 
-It is suggested to run WifiForge on Ubuntu version 24.04 or the lastest version of Kali. 
-The WifiForge installation script may disrupt normal operating system use, it is suggested to use a fresh install, virtual machine, or build using the provided dockerfile (see Set-Up Guide/Docker)
+`WifiForge` is still in its infancy constantly changing and growing, with growth comes issues and pain. This product is not promised to be stable, and should not be used outside of a virtual machine at this time.
 
 ## Compatibility
 
-WifiForge should work on any linux operating system using the docker image. The following Operating Systems have been tested and are confirmed to work.
-Kali Linux 
-Parrot OS
-Ubuntu
+WifiForge should work on any debian based linux operating system, although with the docker, should have a lot further reach.
 
-## Installation
+## Installation Options and Quick Install
 
 <a target="_blank" href="https://wififorge.github.io/Installation/Installation" rel="dofollow"><strong>Installation Documentation</strong></a>
   
-## Walkthroughs
+## Lab Walkthroughs and Tutorials
 
 <a target="_blank" href="https://wififorge.github.io/Lab-Walkthroughs/" rel="dofollow"><strong>Walkthroughs</strong></a>
 
@@ -53,9 +48,9 @@ Ubuntu
 <a target="_blank" href="https://wififorge.github.io/Documentation/Common-Issues" rel="dofollow"><strong>Common Issues</strong></a>
 
 
-## Links and Further Reading 
+## References
 
-https://mininet-wifi.github.io/ 
+https://mininet-wifi.github.io/
 https://www.hackingarticles.in/wireless-penetration-testing-pmkid-attack/
 https://en.wikipedia.org/wiki/IEEE_802.11i-2004
 https://www.wildwesthackinfest.com
