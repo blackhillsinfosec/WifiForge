@@ -56,15 +56,41 @@ Ubuntu
 ## Links and Further Reading 
 
 https://mininet-wifi.github.io/ 
-[https://www.hackingarticles.in/wireless-penetration-testing-pmkid-attack/](https://www.hackingarticles.in/wireless-penetration-testing-pmkid-attack/)
-[https://en.wikipedia.org/wiki/IEEE_802.11i-2004](https://en.wikipedia.org/wiki/IEEE_802.11i-2004)
-[https://www.wildwesthackinfest.com](https://www.wildwesthackinfest.com)
-[https://nmap.org/](https://nmap.org/)
-[https://en.wikipedia.org/wiki/Situation_awareness](https://en.wikipedia.org/wiki/Situation_awareness)
-[https://www.educba.com/linux-network-manager/](https://www.educba.com/linux-network-manager/)
-[https://www.aircrack-ng.org/](https://www.aircrack-ng.org/)
-[https://www.aircrack-ng.org/doku.php?id=airodump-ng](https://www.aircrack-ng.org/doku.php?id=airodump-ng)
-[https://www.aircrack-ng.org/doku.php?id=cracking_wpa](https://www.aircrack-ng.org/doku.php?id=cracking_wpa)
-[https://charlesreid1.com/wiki/Aircrack_and_John_the_Ripper](https://charlesreid1.com/wiki/Aircrack_and_John_the_Ripper)
+https://www.hackingarticles.in/wireless-penetration-testing-pmkid-attack/
+https://en.wikipedia.org/wiki/IEEE_802.11i-2004
+https://www.wildwesthackinfest.com
+https://en.wikipedia.org/wiki/Situation_awareness
+https://www.educba.com/linux-network-manager/
+https://www.aircrack-ng.org/
+https://www.aircrack-ng.org/doku.php?id=airodump-ng
+https://www.aircrack-ng.org/doku.php?id=cracking_wpa
+https://charlesreid1.com/wiki/Aircrack_and_John_the_Ripper
+https://www.checkpoint.com/cyber-hub/cyber-security/what-is-hacking/wi-fi-hacking-how-it-works-and-how-to-stay-secure/
+https://outpost24.com/blog/wps-cracking-with-reaver/
+https://www.infosecinstitute.com/resources/hacking/ethical-hacking-wireless-hacking-with-kismet/
+https://predatech.co.uk/capturing-and-cracking-wpa-wpa2-wifi-passwords/
+https://medium.com/@S3Curiosity/mastering-wi-fi-reconnaissance-with-airmon-ng-a-comprehensive-guide-for-ethical-hackers-6d792c6091f9
+https://www.webasha.com/blog/how-to-use-alfa-network-cards-for-wi-fi-hacking-packet-injection-and-wireless-security-testing-full-guide-for-ethical-hackers
+https://www.bridewell.com/us/wireless-penetration-testing
+https://www.threatlocker.com/blog/pineapple-hacking-how-hackers-can-infiltrate-your-wifi
+https://medium.com/fmisec/wireless-hacking-101-f8352266895
+https://purplesec.us/learn/perform-wireless-penetration-test/
+https://enableit.com/hacking-wifi-technology/?srsltid=AfmBOorXV0fUT1IHYvb-_gykX4W5rOGBbp1bnH0nJZGy5Ws7ihuBn6AJ
+https://www.stationx.net/evil-twin-wifi-attack/
+https://www.linkedin.com/posts/ivanosullivan_when-bluetooth-gets-loose-the-crosswalk-activity-7318005872046002176-bEMl
+https://www.cyberark.com/resources/threat-research-blog/cracking-wifi-at-scale-with-one-simple-trick
+https://www.theverge.com/2024/8/14/24220390/bike-hack-wireless-gear-shifters
+https://www.wired.com/story/russia-gru-apt28-wifi-daisy-chain-breach
+https://www.krackattacks.com/
+https://arxiv.org/abs/1709.01213
+https://www.securew2.com/blog/8-wi-fi-hacks-how-they-work-and-preventive-measures
+https://www.hackthebox.com/blog/wps-pin-attacks-and-cracking-wps-with-reaver
+https://www.edureka.co/blog/types-of-wifi-hacks-prevention/
+https://qualysec.com/wireless-penetration-testing/
+https://ermprotect.com/blog/a-comprehensive-guide-to-penetration-testing/
+https://github.com/grayburn/wireless-pentesting/blob/master/Wifi-recon.md
+https://www.infosecinstitute.com/resources/hacking/13-popular-wireless-hacking-tools/
+https://www.stationx.net/courses/wifi-hacking-course/
+https://keepnetlabs.com/blog/everything-you-need-to-know-about-preventing-wi-fi-pineapple-attacks
 
 Made with ❤️ by Black Hills Infosec
