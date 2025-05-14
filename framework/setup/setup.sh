@@ -80,7 +80,7 @@ run_command "sudo -E pip install -r requirements.txt --break-system-packages" "C
 run_command "sudo apt install -y mininet --allow-downgrades" "Installing Mininet..."
 
 # Run Install Script
-run_command "../mininet-wifi/util/install.sh -Wlnf" "Running Install Script..."
+run_command "../mininet-wifi/util/install.sh -Wlnf" "Running Mininet Wifi Install Script..."
 
 # Compile
 run_command "sudo make install" "Compiling..."
