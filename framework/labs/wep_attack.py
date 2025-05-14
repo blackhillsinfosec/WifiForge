@@ -6,6 +6,8 @@ from WifiForge import print_banner
 from halo import Halo
 import os
 
+description = """This lab demonstrates how to exploit vulnerabilities in WEP encryption using tools like aireplay-ng and aircrack-ng to capture IVs and recover the network key."""
+
 def WEP_ATTACK():
 
     # BUILD NETWORK 

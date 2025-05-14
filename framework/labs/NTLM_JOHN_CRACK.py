@@ -3,10 +3,8 @@ from mn_wifi.net import Mininet_wifi
 from framework.helper_functions.CONNECT_TMUX import CONFIG_TMUX
 from halo import Halo
 import os
-'''
-Estbalish an environment for learning WEP attacks
-See original script here: https://hackmd.io/@ramonfontes/cracking_wep
-'''
+
+description = """This lab involves cracking NTLM password hashes using John the Ripper, illustrating common techniques for offline Windows hash cracking."""
 
 def NTLM_JOHN_CRACK():
 	spin = Halo(text='Loading', spinner='dots')

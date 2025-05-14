@@ -5,6 +5,8 @@ from framework.helper_functions.CONNECT_TMUX import CONFIG_TMUX
 from halo import Halo
 import os
 
+description = """This lab uses the Aircrack-ng suite to perform wireless reconnaissance, collect handshake captures, and attempt key discovery for WEP and WPA/WPA2 networks."""
+
 def AIRSUITE_RECON_AND_KEY_DISCOVERY():
     spin = Halo(text='Loading', spinner='dots')
     spin.start()

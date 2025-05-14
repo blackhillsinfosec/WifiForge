@@ -5,6 +5,8 @@ from framework.helper_functions.CONNECT_TMUX import CONFIG_TMUX
 from halo import Halo
 import os
 
+description = """This lab shows how to use Bettercap to intercept and capture Wi-Fi authentication handshakes for later offline password cracking."""
+
 def BETTERCAP_WIFI_AUTH_CAPTURE():
     spin = Halo(text='Loading', spinner='dots')
     spin.start()

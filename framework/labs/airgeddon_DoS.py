@@ -5,6 +5,7 @@ from framework.helper_functions.CONNECT_TMUX import CONFIG_TMUX
 from halo import Halo
 import os
 
+description = """This lab demonstrates how to use Airgeddon for executing denial-of-service (DoS) attacks on wireless networks by deauthenticating clients and disrupting connectivity."""
 
 def Airgeddon_DoS():
     spin = Halo(text='Loading', spinner='dots')

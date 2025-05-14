@@ -5,6 +5,8 @@ from framework.helper_functions.CONNECT_TMUX import CONFIG_TMUX
 from halo import Halo
 import os
 
+description = """This lab guides users through converting wireless handshake captures to the HCCAPX format and using Hashcat to crack WPA/WPA2 passwords with GPU acceleration."""
+
 def PACKET_CAPTURE_TO_HCCAPX_HASHCAT_CRACKING():
     spin = Halo(text='Loading', spinner='dots')
     spin.start()

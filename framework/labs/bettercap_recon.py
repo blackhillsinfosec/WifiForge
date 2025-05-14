@@ -5,6 +5,8 @@ from framework.helper_functions.CONNECT_TMUX import CONFIG_TMUX
 from halo import Halo
 import os
 
+description = """This lab introduces Bettercap for performing wireless reconnaissance, scanning for nearby access points and clients, and collecting intelligence on network traffic."""
+
 def BETTERCAP_RECON():
     spin = Halo(text='Loading', spinner='dots')
     spin.start()

@@ -3,6 +3,8 @@ from framework.helper_functions.CONNECT_TMUX import CONFIG_TMUX
 from halo import Halo
 import os
 
+description = """This lab covers the use of Aircrack-ng to crack WPA/WPA2 handshakes by applying dictionary or brute-force attacks on captured authentication data."""
+
 def CRACKING_WPA_WITH_AIRCRACK():
     spin = Halo(text='Loading', spinner='dots')
     spin.start()

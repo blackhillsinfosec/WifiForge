@@ -4,6 +4,8 @@ from framework.helper_functions.CONNECT_TMUX import CONFIG_TMUX
 from halo import Halo
 import os
 
+description = """This lab covers the Pixie Dust attack against WPS-enabled networks, demonstrating how offline exploitation of weak Diffie-Hellman parameters can reveal the WPA/WPA2 passphrase."""
+
 def WPS_PIXIE_DUST_ATTACK():
     spin = Halo(text='Loading', spinner='dots')
     spin.start()

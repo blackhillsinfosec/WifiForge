@@ -5,10 +5,8 @@ from halo import Halo
 from framework.helper_functions.CONNECT_TMUX import CONFIG_TMUX
 from halo import Halo
 import os
-'''
-Estbalish an environment for learning WEP attacks
-See original script here: https://hackmd.io/@ramonfontes/cracking_wep
-'''
+
+description = """This lab demonstrates the creation of an Evil Twin access point to impersonate a legitimate network, with the goal of harvesting client credentials or injecting malicious content."""
 
 def EVIL_TWIN():
 	spin = Halo(text='Loading', spinner='dots')

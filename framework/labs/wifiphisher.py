@@ -6,6 +6,8 @@ import time
 from halo import Halo
 import os
 
+description = """This lab uses Wifiphisher to carry out phishing-based attacks on Wi-Fi clients by creating rogue APs and tricking users into entering credentials or installing malware."""
+
 def WIFIPHISHER():
     spin = Halo(text='Loading', spinner='dots')
     spin.start()
