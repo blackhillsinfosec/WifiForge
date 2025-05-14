@@ -116,7 +116,7 @@ def print_menu(term, selected_index):
 
         # Draw outer box
         print(term.move(outer_top, outer_left) + "┌" + "─" * (outer_width - 2) + "─┐")
-        print(term.move(outer_top, outer_left) + "" + "Version 3.2.0" + "" * (outer_width - 2) + "")
+        print(term.move(outer_top, outer_left) + "" + "┌|Version 3.2.0|" + "" * (outer_width - 2) + "")
         for i in range(outer_height - 2):
             print(term.move(outer_top + 1 + i, outer_left) + "│" + " " * (outer_width - 2) + " │")
         print(term.move(outer_top + outer_height - 1, outer_left) + "└" + "─" * (outer_width - 2) + "─┘")
