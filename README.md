@@ -12,6 +12,7 @@
   <a href="https://x.com/BHinfoSecurity"><img src="https://img.shields.io/github/stars/blackhillsinfosec/WifiForge?style=flat-square&color=rgb(255%2C218%2C185)" alt="Wifi Forge Stars" /></a>
 
 <p class="align center">
+    # `Exploiting AI`
 <h4><code>WifiForge</code> provides a safe and legal environment for learning WiFi hacking. Based on the open source mininet-wifi, this project automatically sets up the networks and tools needed to run a variety of WiFi exploitation labs, removing the need for the overhead and hardware normally required to perform these attacks.</h4>
 </p>
 
