@@ -1,6 +1,5 @@
 <div align="center">
 <a href="https://blackhillsinfosec.com"><img width="100%" src="https://github.com/her3ticAVI/MiniNet-framework/blob/main/images/WifiForgeVersion2.png" alt="Wifi Forge Logo" /></a>
-<hr>
   <a href="https://github.com/blackhillsinfosec/WifiForge/actions"><img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/blackhillsinfosec/WifiForge/.github%2Fworkflows%2Fpython-app.yml?style=flat-square"></a> 
   &nbsp;
   <a href="https://discord.com/invite/bhis"><img alt="Discord" src="https://img.shields.io/discord/967097582721572934?label=Discord&color=7289da&style=flat-square" /></a>
@@ -10,6 +9,7 @@
   <a href="https://x.com/BHinfoSecurity"><img src="https://img.shields.io/badge/follow-BHIS-1DA1F2?logo=twitter&style=flat-square" alt="BHIS Twitter" /></a>
   &nbsp;
   <a href="https://x.com/BHinfoSecurity"><img src="https://img.shields.io/github/stars/blackhillsinfosec/WifiForge?style=flat-square&color=rgb(255%2C218%2C185)" alt="Wifi Forge Stars" /></a>
+<hr>
 
 # `WifiForge`
 
