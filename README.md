@@ -2,7 +2,7 @@
 <a href="https://blackhillsinfosec.com"><img width="100%" src="https://github.com/her3ticAVI/MiniNet-framework/blob/main/images/WifiForgeVersion2.png" alt="Wifi Forge Logo" /></a>
 <hr>
 
-# `WifiForge`
+<h1><code>WifiForge</code></h1>
 
   <a href="https://github.com/blackhillsinfosec/WifiForge/actions"><img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/blackhillsinfosec/WifiForge/.github%2Fworkflows%2Fpython-app.yml?style=flat-square"></a> 
   &nbsp;
