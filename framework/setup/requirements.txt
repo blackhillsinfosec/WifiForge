@@ -3,3 +3,5 @@ types-keyboard==0.13
 types-tqdm==4.66
 blessed
 halo
+plotext
+itertools
