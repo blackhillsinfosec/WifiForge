@@ -33,9 +33,9 @@
 
 > Note: `WifiForge` is still in its infancy constantly changing and growing, with growth comes issues and pain. This product is not promised to be stable, and should not be used outside of a virtual machine at this time.
 
-- [Installation Documentation](https://wififorge.github.io/Installation/Installation)
+- [Installation Documentation](https://wififorge.github.io/Installation)
 - [Walkthroughs](https://wififorge.github.io/Lab-Walkthroughs/)
-- [Common Issues](https://wififorge.github.io/Documentation/Common-Issues)
+- [Common Issues](https://wififorge.github.io/Troubleshooting)
 
 ## References
 - https://mininet-wifi.github.io/
