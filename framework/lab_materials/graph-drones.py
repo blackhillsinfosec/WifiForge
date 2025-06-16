@@ -12,13 +12,13 @@ def graph():
 
     while True:
         # pull the drone positions written by the drone_hacking script
-        with open("/tmp/drone_positions.json") as f:
+        with open("/tmp/drone-info.json") as f:
                 data = json.load(f)
 
         # place coordinates and drone names into separate lists
         names = list(data.keys())
-        x = [n[0] for n in data.values()]
-        y = [n[1] for n in data.values()]
+        x = [data[name]["position"][0] for name in names]
+        y = [data[name]["position"][1] for name in names]
 
         plt.clear_figure()
 
