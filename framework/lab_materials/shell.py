@@ -26,7 +26,7 @@ def handle_client(conn, addr, passwd):
 
         # open the shell
         while True:
-            conn.send(f"{cwd} $ ".encode())
+            conn.send(f"{cwd}".encode())
             cmd = conn.recv(1024).decode().strip()
             if not cmd:
                 continue
