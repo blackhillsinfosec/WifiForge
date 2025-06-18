@@ -15,6 +15,7 @@ def handle_client(conn, addr, passwd):
 
         # read in the password and compare it from argv1
         client_password = conn.recv(1024).decode().strip()
+        print(f"[G] Expected: {passwd} | Got: {client_password}")
 
         if client_password != passwd:
             conn.send(b"Incorrect password.\n")
@@ -61,7 +62,9 @@ def handle_client(conn, addr, passwd):
     finally:
         conn.close()
 
-def shell_server(host='0.0.0.0', port=4444, passwd='password'):
+def shell_server(passwd, port):
+    host='0.0.0.0'
+    
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         s.bind((host, port))
@@ -73,8 +76,10 @@ def shell_server(host='0.0.0.0', port=4444, passwd='password'):
             handle_client(conn, addr, passwd)
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
+    if len(sys.argv) < 3:
         print("Usage: python3 shell.py <password>")
-        sys.exit(1)
+        exit()
 
-    shell_server(passwd=sys.argv[1])
+    passwd = sys.argv[1]
+    port   = int(sys.argv[2])
+    shell_server(passwd, port)
