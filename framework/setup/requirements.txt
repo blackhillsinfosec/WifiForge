@@ -5,3 +5,4 @@ blessed
 halo
 plotext
 itertools
+pwntools
