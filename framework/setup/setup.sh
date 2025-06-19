@@ -82,6 +82,11 @@ run_command "sudo apt install -y mininet --allow-downgrades" "Installing Mininet
 # Run Install Script
 run_command "../mininet-wifi/util/install.sh -Wlnf" "Running Mininet Wifi Install Script..."
 
+run_command "../mininet-wifi/util/install.sh -Wn" "Installing Mininet Wifi and core dependencies"
+run_command "../mininet-wifi/util/install.sh -l" "Installing wmediumd"
+run_command "../mininet-wifi/util/install.sh -v" "Installing Openvswitch"
+run_command "../mininet-wifi/util/install.sh -f" "Installing Openflow" 
+
 # Compile
 run_command "sudo make install" "Compiling..."
 
