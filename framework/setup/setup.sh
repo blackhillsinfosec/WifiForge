@@ -60,7 +60,7 @@ run_command() {
 }
 
 run_command "sudo apt update -y" "Updating package list..."
-run_command "sudo apt install -y ifupdown pip curl aircrack-ng john dsniff tmux git" "Installing required tools..."
+run_command "sudo apt install -y ifupdown pip curl aircrack-ng john dsniff tmux git help2man" "Installing required tools..."
 
 # Adding Submodules to safe.directory
 run_command "git config --global --add safe.directory \"$truncated_cwd\"" "Adding Submodules to safe.directory..."
@@ -71,20 +71,24 @@ run_command "git submodule init" "Initializing Submodules..."
 # Update Submodules
 run_command "git submodule update" "Updating Submodules..."
 
-run_command "sudo -E python3 -m pip config set global.break-system-packages true" "Fixing Package Configurations..."
+run_command "sudo -E pip config set global.break-system-packages true" "Fixing Package Configurations..."
 
 # Set global pip variable to break system packages
-run_command "sudo -E pip install -r requirements.txt --break-system-packages" "Configuring pip..."
+run_command "sudo -E pip install -r requirements.txt" "Configuring pip..."
 
 # Install Mininet
 run_command "sudo apt install -y mininet --allow-downgrades" "Installing Mininet..."
 
 # Run Install Script
-run_command "../mininet-wifi/util/install.sh -Wlnf" "Running Mininet Wifi Install Script..."
+run_command "../mininet-wifi/util/install.sh -n" "Installing Mininet Wifi and core dependencies"
+run_command "../mininet-wifi/util/install.sh -l" "Installing wmediumd"
+run_command "../mininet-wifi/util/install.sh -v" "Installing Openvswitch"
+run_command "../mininet-wifi/util/install.sh -f" "Installing Openflow"
+run_command "../mininet-wifi/util/install.sh -W" "Installing additional dependencies"
+
+run_command "sudo make install" "Compiling"
 
 # Compile
-run_command "sudo make install" "Compiling..."
-
 run_command "sudo apt install openvswitch-testcontroller -y" "Installing Openvswitch..."
 run_command "sudo ln /usr/bin/ovs-testcontroller /usr/bin/controller" "Configuring Controller..."
 run_command "sudo service openvswitch-switch start" "Starting Openvswitch..."
