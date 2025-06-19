@@ -78,6 +78,11 @@ def moveongraph(drone, position, data):
 
         clearscreen()
 
+def restoreinterfaces():
+    basedir = os.path.dirname(os.path.abspath(__file__))
+    restore = os.path.join(basedir, 'restore-interfaces.sh') # /lab_materials/restore-interfaces.sh
+    os.system(f"chmod +x {restore} ; bash {restore}")
+
 def connectshell(drone, listener, passwd, port):
     print(f"Connecting to {drone}...")
     
@@ -93,6 +98,9 @@ def connectshell(drone, listener, passwd, port):
     clearscreen()
 
 def main():
+    restoreinterfaces()
+    clearscreen()
+
     # pull the drone passwords written by UAV
     with open("/tmp/drone-info.json") as f:
             data = json.load(f)
