@@ -84,6 +84,9 @@ run_command "../mininet-wifi/util/install.sh -n" "Installing Mininet Wifi and co
 run_command "../mininet-wifi/util/install.sh -l" "Installing wmediumd"
 run_command "../mininet-wifi/util/install.sh -v" "Installing Openvswitch"
 run_command "../mininet-wifi/util/install.sh -f" "Installing Openflow"
+run_command "../mininet-wifi/util/install.sh -W" "Installing additional dependencies"
+
+run_command "sudo make install" "Compiling"
 
 # Compile
 run_command "sudo apt install openvswitch-testcontroller -y" "Installing Openvswitch..."
