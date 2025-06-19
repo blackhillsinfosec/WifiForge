@@ -65,7 +65,6 @@ def drones():
     net.addLink(nat2, dr2)
     
     # LAN address, WAN is applied automatically
-    attacker.setIP('10.0.0.1/8', intf='Attacker-wlan1')
     nat1.setIP(drones["dr1"]["listener"]+'/24', intf='nat1-eth1')
     nat2.setIP(drones["dr2"]["listener"]+'/24', intf='nat2-eth1')
     for n in [nat1, nat2]:
