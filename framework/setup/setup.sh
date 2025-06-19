@@ -74,22 +74,18 @@ run_command "git submodule update" "Updating Submodules..."
 run_command "sudo -E python3 -m pip config set global.break-system-packages true" "Fixing Package Configurations..."
 
 # Set global pip variable to break system packages
-run_command "sudo -E pip install -r requirements.txt --break-system-packages" "Configuring pip..."
+run_command "sudo -E pip install -r requirements.txt" "Configuring pip..."
 
 # Install Mininet
 run_command "sudo apt install -y mininet --allow-downgrades" "Installing Mininet..."
 
 # Run Install Script
-run_command "../mininet-wifi/util/install.sh -Wlnf" "Running Mininet Wifi Install Script..."
-
-run_command "../mininet-wifi/util/install.sh -Wn" "Installing Mininet Wifi and core dependencies"
+run_command "../mininet-wifi/util/install.sh -n" "Installing Mininet Wifi and core dependencies"
 run_command "../mininet-wifi/util/install.sh -l" "Installing wmediumd"
 run_command "../mininet-wifi/util/install.sh -v" "Installing Openvswitch"
-run_command "../mininet-wifi/util/install.sh -f" "Installing Openflow" 
+run_command "../mininet-wifi/util/install.sh -f" "Installing Openflow"
 
 # Compile
-run_command "sudo make install" "Compiling..."
-
 run_command "sudo apt install openvswitch-testcontroller -y" "Installing Openvswitch..."
 run_command "sudo ln /usr/bin/ovs-testcontroller /usr/bin/controller" "Configuring Controller..."
 run_command "sudo service openvswitch-switch start" "Starting Openvswitch..."
