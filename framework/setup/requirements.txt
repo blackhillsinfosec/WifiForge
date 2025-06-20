@@ -4,5 +4,5 @@ types-tqdm==4.66
 blessed
 halo
 plotext
-itertools
+#itertools
 pwntools
