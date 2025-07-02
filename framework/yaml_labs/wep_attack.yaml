@@ -1,0 +1,40 @@
+lab_name: wep_attack
+description: >
+  This lab demonstrates how to exploit vulnerabilities in WEP encryption using tools like aireplay-ng and aircrack-ng capture IVs and recover the network key. 
+
+stations:
+  - name: Attacker
+    passwd: 123456789a
+    encrypt: wep
+    wlans: 2
+  - name: host1
+    passwd: 123456789a
+    encrypt: wep
+  - name: host2
+    passwd: 123456789a
+    encrypt: wep
+
+access_points:
+  - name: ap1
+    ssid: WEP_NETWORK
+    mode: g
+    channel: 6
+    passwd: 123456789a
+    encrypt: wep
+    failMode: standalone
+    datapath: user
+
+links:
+  - endpoints: [host1, ap1]
+  - endpoints: [host2, ap1]
+  - endpoints: [Attacker, ap1]
+
+tmux_targets:
+  - Attacker
+  - host1
+  - host2
+
+tmux_session_name: WEP_ATTACK
+
+cleanup:
+  - clear

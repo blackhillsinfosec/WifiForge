@@ -1,0 +1,34 @@
+lab_name: ntlm_john_crack
+description: >
+  This lab involves cracking NTLM password hashes using John the Ripper, illustrating common techniques for ofline Windows hash cracking.
+
+stations:
+  - name: Attacker
+    passwd: JERRY277626AA
+    encrypt: wpa2
+    wlans: 2
+  - name: Attacker
+    passwd: JERRY277626AA
+    encrypt: wpa2
+    wlans: 2
+
+access_points:
+  - name: ap1
+    ssid: CORP_NET
+    mode: g
+    channel: 1
+    passwd: JERRY277626AA
+    encrypt: wpa2
+
+links:
+  - endpoints: [Attacker, ap1]
+  - endpoints: [host1, ap1]
+
+tmux_targets:
+  - Attacker
+
+tmux_session_name: NTLM JOHN CRACK
+
+cleanup:
+  - rm /WifiForge/framework/loot/4whs.pot
+  - clear

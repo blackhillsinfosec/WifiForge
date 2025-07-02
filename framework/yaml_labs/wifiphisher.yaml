@@ -1,0 +1,38 @@
+lab_name: wifiphisher
+description: >
+  This lab uses Wifiphiser to carry out phishing-based attacks on Wi-Fi clients by creating rogue APs and tricking users into entering credentials or installing malware.
+
+stations:
+  - name: Attacker
+    passwd: december2022
+    encrypt: wpa2
+    wlans: 2
+  - name: host1
+    passwd: december2022
+    encrypt: wpa2
+  - name: host2
+    passwd: december2022
+    encrypt: wpa2
+
+access_points:
+  - name: ap1
+    ssid: mywifi
+    passwd: december2022
+    encrypt: wpa2
+    mode: g
+    channel: 6
+
+links:
+  - endpoints: [Attacker, ap1]
+  - endpoints: [host1, ap1]
+  - endpoints: [host2, ap1]
+
+tmux_targets:
+  - Attacker
+  - host1
+
+tmux_session_name: WIFIPHISHER
+
+cleanup:
+  - "ps aux | grep 'wifiphisher' | awk '{print $2}' | xargs -I {} kill -9 {}"
+  - clear

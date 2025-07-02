@@ -1,0 +1,88 @@
+lab_name: packet_capture_to_hccapx_hashcat_cracking
+description: >
+  This lab guides users through converting wireless handshake captures to the HCCAPX format and using Hashcat to crack WPA/WPA2 passwords with GPU acceleration.
+
+stations:
+  - name: Attacker
+    wlans: 1
+  - name: host1
+    passwd: 123456789a
+    encrypt: wep
+  - name: host2
+    passwd: 123456789a
+    encrypt: wep
+  - name: host3
+    passwd: december2022
+    encrypt: wpa2
+  - name: host4
+    passwd: december2022
+    encrypt: wpa2
+  - name: host5
+    passwd: password
+    encrypt: wpa2
+  - name: host6
+    passwd: password
+    encrypt: wpa2
+  - name: host7
+    passwd: password
+    encrypt: wpa2
+  - name: host8
+    passwd: supersecurepassword
+    encrypt: wpa2
+  - name: host9
+    passwd: iamhidden
+    encrypt: wpa2
+
+access_points:
+  - name: ap0
+    ssid: WEP_Network
+    passwd: 123456789a
+    encrypt: wep
+    mode: g
+    channel: 1
+    failMode: standalone
+    datapath: user
+  - name: ap1
+    ssid: WPA2_Network
+    passwd: december2022
+    encrypt: wpa2
+    mode: g
+    channel: 6
+  - name: ap2
+    ssid: Harlow_Home_Wifi
+    passwd: password
+    encrypt: wpa2
+    mode: g
+    channel: 11
+  - name: ap3
+    ssid: FBI_Van
+    passwd: supersecurepassword
+    encrypt: wpa2
+    mode: g
+    channel: 1
+  - name: ap4
+    ssid: cantseeme
+    passwd: iamhidden
+    encrypt: wpa2
+    mode: g
+    channel: 11
+
+links:
+  - endpoints: [host1, ap0]
+  - endpoints: [host2, ap0]
+  - endpoints: [host3, ap1]
+  - endpoints: [host4, ap1]
+  - endpoints: [host5, ap2]
+  - endpoints: [host6, ap2]
+  - endpoints: [host7, ap2]
+  - endpoints: [host8, ap3]
+  - endpoints: [host9, ap4]
+
+tmux_targets:
+  - Attacker
+  - host_machine
+
+tmux_session_name: HCCAPX_HASHCAT
+
+cleanup:
+  - clear

@@ -1,0 +1,87 @@
+lab_name: airgeddon_dos
+description: >
+  This lab demonstrates how to use Airgeddon for executig denial-of-service (DoS) attacks on wireless networks by dauthenticating clients and sicrupting connectivity.
+
+stations:
+  - name: Attacker
+    wlans: 2
+  - name: host1
+    passwd: 123456789a
+    encrypt: wep
+  - name: host2
+    passwd: 123456789a
+    encrypt: wep
+  - name: host3
+    passwd: december2022
+    encrypt: wpa2
+  - name: host4
+    passwd: december2022
+    encrypt: wpa2
+  - name: host5
+    passwd: password
+    encrypt: wpa2
+  - name: host6
+    passwd: password
+    encrypt: wpa2
+  - name: host7
+    passwd: password
+    encrypt: wpa2
+  - name: host8
+    passwd: supersecurepassword
+    enrypt: wpa2
+  - name: host9
+    passwd: iamhidden
+    encrypt: wpa2
+
+access_points:
+  - name: ap0
+    ssid: WEP_Network
+    passwd: 123456789a
+    encrypt: wep
+    mode: g
+    channel: 1
+    failMode: standalone
+    datapath: user
+  - name: ap1
+    ssid: WPA2_Network
+    passwd: december2022
+    encrypt: wpa2
+    mode: g
+    channel: 6
+  - name: ap2
+    ssid: Harlow_Home_Wifi
+    passwd: password
+    encrypt: wpa2
+    mode: g
+    channel: 11
+  - name: ap3
+    ssid: FBI_Van
+    passwd: supersecurepassword
+    encrypt: wpa2
+    mode: g
+    channel: 1
+  - name: ap4
+    ssid: antseeme
+    passwd: iamhidden
+    encrypt: wpa2
+    mode: g
+    channel: 11
+
+links:
+  - enpoints: [host1, ap0]
+  - enpoints: [host2, ap0]
+  - enpoints: [host3, ap1]
+  - enpoints: [host4, ap1]
+  - enpoints: [host5, ap2]
+  - enpoints: [host6, ap2]
+  - enpoints: [host7, ap2]
+  - enpoints: [host8, ap3]
+  - enpoints: [host9, ap4]
+
+tmux_targets:
+  - Attacker
+
+tmux_session_name: BETTERCAP
+
+cleanup:
+  - clear

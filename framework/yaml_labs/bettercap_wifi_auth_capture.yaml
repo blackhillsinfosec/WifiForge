@@ -1,0 +1,88 @@
+lab_name: bettercap_wifi_auth_capture
+description: >
+  This lab shows how to use Bettercap to intercept and capture Wi-Fi authentication handshakes for later offline password cracking.
+
+stations:
+  - name: Attacker
+    wlans: 1
+  - name: host1
+    passwd: 123456789a
+    encrypt: wep
+  - name: host2
+    passwd: 123456789a
+    encrypt: wep
+  - name: host1_wpa
+    passwd: december2022
+    encrypt: wpa2
+  - name: host2_wpa
+    passwd: december2022
+    encrypt: wpa2
+  - name: host5
+    passwd: password
+    encrypt: wpa2
+  - name: host6
+    passwd: password
+    encrypt: wpa2
+  - name: host7
+    passwd: password
+    encrypt: wpa2
+  - name: host8
+    passwd: supersecurepassword
+    encrypt: wpa2
+  - name: host9
+    passwd: iamhidden
+    encrypt: wpa2
+
+access_points:
+  - name: ap0
+    ssid: WEP_Network
+    passwd: 123456789a
+    encrypt: wep
+    mode: g
+    channel: 1
+    failMode: standalone
+    datapath: user
+  - name: ap1
+    ssid: WPA2_Network
+    passwd: december2022
+    encrypt: wpa2
+    mode: g
+    channel: 6
+    mac: 76:df:71:67:40:2b
+  - name: ap2
+    ssid: Harlow_Home_Wifi
+    passwd: password
+    encrypt: wpa2
+    mode: g
+    channel: 11
+  - name: ap3
+    ssid: FBI_Van
+    passwd: supersecurepassword
+    encrypt: wpa2
+    mode: g
+    channel: 1
+  - name: ap4
+    ssid: cantseeme
+    passwd: iamhidden
+    encrypt: wpa2
+    mode: g
+    channel: 11
+
+links:
+  - endpoints: [host1, ap0]
+  - endpoints: [host2, ap0]
+  - endpoints: [host1_wpa, ap1]
+  - endpoints: [host2_wpa, ap1]
+  - endpoints: [host5, ap2]
+  - endpoints: [host6, ap2]
+  - endpoints: [host7, ap2]
+  - endpoints: [host8, ap3]
+  - endpoints: [host9, ap4]
+
+tmux_targets:
+  - Attacker
+
+tmux_sessions_name: BETTERCAP_AUTH_CAP
+
+cleanup:
+  - clear

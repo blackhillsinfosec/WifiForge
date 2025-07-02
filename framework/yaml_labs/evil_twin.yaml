@@ -1,0 +1,33 @@
+lab_name: evil_twin
+description: >
+  This lab demonstrates the creation of an Evil Twin access point to impersonate a legitimate network, with the goal of harvesting client credentials or injecting malicious content.
+
+stations:
+  - name: Attacker
+    passwd: JERRY277626AA
+    encrypt: wpa2
+    wlans: 2
+  - name: host1
+    passwd: JERRY277626AA
+    encrypt: wpa2
+    wlans: 2
+
+access_points:
+  - name: ap1
+    ssid: CORP_NET
+    passwd: JERRY277626AA
+    encrypt: wpa2
+    mode: g
+    channel: 1
+
+links:
+  - endpoints: [Attacker, ap1]
+  - endpoints: [host1, ap1]
+
+tmux_targets:
+  - Attacker
+
+tmux_session_name: EVIL_TWIN
+
+cleanup:
+  - clear
