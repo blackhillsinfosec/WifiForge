@@ -1,0 +1,78 @@
+lab_name: drone_hacking
+description: >
+  This lab demonstrates wireless drone hacking and compromise.
+
+drones:
+  - name: dr1
+    position: [20.0, 20.0, 0.0]
+    password: password!
+    listener: 10.1.0.254
+    port: 4441
+  - name: dr2
+    position: [10.0, 28.0, 0.0]
+    password: arcangel
+    listener: 10.2.0.254
+    port: 4442
+
+stations:
+  - name: Attacker
+    wlans: 2
+  - name: st1
+    passwd: #
+    encrypt: wpa2
+    mac: 00:00:00:00:00:01
+    ip: 10.1.0.10/24
+  - name: st2
+    passwd: #
+    encrypt: wpa2
+    mac: 00:00:00:00:00:02
+    ip: 10.2.0.10/24
+
+access_points:
+  - name: dr1
+    ssid: DRONE1
+    passwd: #
+    encrypt: wpa2
+    mode: g
+    channel: 3
+    failMode: standalone
+  - name: dr2
+    ssid: DRONE2
+    passwd: #
+    encrypt: wpa2
+    mode: g
+    channel: 6
+    failMode: standalone
+
+NAT_config:
+  - name: nat1
+  - name: nat2
+
+links:
+  - endpoints: [dr1, st1]
+  - endpoints: [dr2, st2]
+  - endpoints: [attacker, dr1]
+  - endpoints: [attacker, dr2]
+  - endpoints: [nat1, dr1]
+  - endpoints: [nat2, dr2]
+
+
+#
+#routing
+#custom/general cmds
+#
+#
+#
+
+tmux_targets:
+  session: DRONES
+  panes:
+  - Attacker
+  - Attacker
+  - Attacker
+
+cleanup:
+  commands:
+    - clear
+    - rm -f /tmp/drone-info.json
+
