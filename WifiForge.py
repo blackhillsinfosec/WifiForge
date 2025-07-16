@@ -1,3 +1,4 @@
+import yaml
 from blessed import Terminal
 from subprocess import DEVNULL
 import os
@@ -46,36 +47,27 @@ def remove_old_variables():
     Mac80211Hwsim.hwsim_ids = []
     os.system("mn -c > /dev/null 2>&1")
 
-def import_module_and_get_function(file_path, module_name):
-    spec = importlib.util.spec_from_file_location(module_name, file_path)
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-
-    # Get the first non-helper function as before
-    functions = {name: func for name, func in inspect.getmembers(module, inspect.isfunction)
-                 if name not in ('print_banner', 'CONFIG_TMUX', 'INIT_NET')}
-    func_name, function = next(iter(functions.items()), (None, None))
-    
-    # Try to retrieve the module-level variable 'description'
-    description = getattr(module, 'description', "No description provided.")
-
-    return func_name, function, description
-
-def load_functions_from_py_files(directory):
+def load_functions_from_yaml_files():
+    base_dir = os.path.dirname(__file__)
+    yaml_dir = os.path.join(base_dir, 'framework', 'yaml_labs')
     function_dict = {}
-    current_script = os.path.basename(__file__)
-    for filename in os.listdir(directory):
-        if filename.endswith(".py") and not filename.startswith(".") and filename != current_script:
-            module_name = filename[:-3]
-            file_path = os.path.join(directory, filename)
-            func_name, function, description = import_module_and_get_function(file_path, module_name)
-            if func_name and function:
-                # Map filename to a tuple including the function and its description
-                function_dict[filename] = (func_name, function, description)
+
+    for filename in os.listdir(yaml_dir):
+        if filename.endswith((".yaml", ".yml")) and not filename.startswith("."):
+            file_path = os.path.join(yaml_dir, filename)
+            with open(file_path, 'r') as f:
+                try:
+                    data = yaml.safe_load(f)
+                    lab_name = data.get('lab_name')
+                    description = data.get('description')
+                    function_dict[filename] = (lab_name, description)
+                except yaml.YAMLError as e:
+                    print(f"Error parsing YAML file {filename}: {e}")
+
     return function_dict
 
-directory = os.path.join(os.path.dirname(os.path.realpath(__file__)), "framework", "labs")
-functions = load_functions_from_py_files(directory)
+directory = os.path.join(os.path.dirname(os.path.realpath(__file__)), "framework", "yaml_labs")
+functions = load_functions_from_yaml_files()
 file_names = list(functions.keys())
 menu = [file.replace("_", " ").title()[:-3] for file in file_names]
 
@@ -164,9 +156,14 @@ def main():
                 current_row += 1
             elif key.code in (term.KEY_ENTER, '\n', '\r'):
                 os.system("clear")
-                # Optionally redirect output during function execution
+            	selected_file = file_names[current_row]
+	        # Optionally redirect output during function execution
                 sys.stdout = open(os.devnull, 'w')
-                functions[file_names[current_row]][1]()  # execute lab function
+
+            if selected_file.endswith((".yaml", ".yml")):
+		yaml_path = os.path.join("framework", "yaml_labs", selected_file)
+                os.system(f"python3 Yaml_Runner.py {yaml_path}") #
+
                 remove_old_variables()
                 sys.stdout = sys.__stdout__
             elif key.lower() == 'q':

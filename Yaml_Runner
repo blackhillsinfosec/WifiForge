@@ -1,0 +1,76 @@
+import yaml
+from blessed import terminal
+from mininet.net import Mininet
+from mn_wifi.net import Mininet_wifi
+from framework.helper_functions.CONNECT_TMUX import CONFIG_TMUX
+from halo import Halo
+from time import sleep
+from Wififorge import print_banner
+import threading
+import time
+import os
+import sys
+import subprocess
+
+def load_lab(filepath):
+	with opesn(filepath, 'r') as f:
+		return yaml.safe_load(f)
+
+def run_yaml_labs(data):
+	spin = Halo(text='Loading', spinner='dots')
+	spin.start()
+
+	net = Mininet_wifi()
+	stations = {}
+	aps = {}
+
+	#station data
+	for sta in data.get('stations', []):
+		kwargs = {'wlans': sta.get('wlans', 1}
+		if 'passwd' in sta:
+			kwargs['passwd'] = ap['passwd']
+		if 'encrypt' in sta:
+			kwargs['encrypt'] = ap['encrypt']
+		stations[sta['name']] = net.addStation(sta['name'], **kwargs)
+
+	#access point data
+	for ap in data.get('access points', []):
+		kwargs = {
+			'ssid': ap['ssid'],
+			'mode': ap.get('mode', 'g')
+			'channel': ap.get('channel', 1)
+		}
+		if 'passwd' in ap:
+			kwargs['passwd'] = ap['passwd']
+		if 'encrypt' in ap:
+			kwargs['encrypt'] = ap['encrypt']
+		if 'failmode' in ap:
+			kwargs['failmode'] = ap['failmode']
+		if 'datapath' in ap:
+			kwargs['datapath'] = ap['datapath']
+		aps[ap['name']] = net.addAccessPoint(ap['name'], **kwargs)
+
+	net = configureWifiNodes()
+
+	#link data
+	for link in data.get('links', []):
+		src, dst = link['endpoints']
+		net.addlink(stations.get(src) or aps.get(src), stations.get(dst) or aps.get(dst)
+
+	net.build()
+	for ap in aps.values(): #ap start
+		ap.start([])
+	spin.stop()
+
+	#tmux
+	CONFIG_TMUX(data['tmux_targets'], data.['tmux_session_name']) #maybe put in wififorge directly instead of runner
+
+	spin.start()
+	net.stop()
+	spin.stop()
+
+	#cleanup data
+	cleanup_commands = data.get('cleanup', []):
+	if cleanup_commands:
+		for cmd in cleanup_commands:
+		subprocess.run(cmd, shell=True, check=True)
