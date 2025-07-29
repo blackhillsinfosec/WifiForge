@@ -65,6 +65,8 @@ def run_yaml_labs(data):
 	#tmux
 	CONFIG_TMUX(data['tmux_targets'], data.['tmux_session_name']) #maybe put in wififorge directly instead of runner
 
+	#add specific cases for drones and pixie
+
 	spin.start()
 	net.stop()
 	spin.stop()
