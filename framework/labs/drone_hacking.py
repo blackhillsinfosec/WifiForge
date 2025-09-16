@@ -83,7 +83,7 @@ def drones():
     x, y, z = drones["dr1"]["position"]
     dr1.setPosition(f'{x},{y},{z}')
 
-    x, y, z = drones["dr1"]["position"]
+    x, y, z = drones["dr2"]["position"]
     dr2.setPosition(f'{x},{y},{z}')
 
     # userland listener service on associated port, write the password for the drone
