@@ -15,7 +15,7 @@ os_name=$(lsb_release -si 2>/dev/null)
 os_version=$(lsb_release -sr 2>/dev/null)
 
 if [[ "$os_name" != "Kali" ]]; then
-    echo -e "${RED}✖ OS not supported... Please use the Docker container.${RESET}"
+    echo -e "${RED}✖ OS not supported... Please use Kali Linux.${RESET}"
     echo -e "${CYAN}Detected OS: ${os_name} ${os_version}${RESET}"
     exit 1
 fi
@@ -78,14 +78,15 @@ run_command "sudo -E pip install -r requirements.txt" "Configuring pip..."
 
 # Install Mininet
 run_command "sudo apt install -y mininet --allow-downgrades" "Installing Mininet..."
+run_command "sudo apt install bettercap -y" "Installing Bettercap..."
 
 # Run Install Script
-run_command "../mininet-wifi/util/install.sh -n" "Installing Mininet Wifi and core dependencies"
-run_command "../mininet-wifi/util/install.sh -l" "Installing wmediumd"
-run_command "../mininet-wifi/util/install.sh -v" "Installing Openvswitch"
-run_command "../mininet-wifi/util/install.sh -f" "Installing Openflow"
-run_command "../mininet-wifi/util/install.sh -W" "Installing additional dependencies"
-run_command "sudo python3 ../mininet-wifi/setup.py install"
+run_command "../mininet-wifi/util/install.sh -n" "Installing Mininet Wifi and core dependencies..."
+run_command "../mininet-wifi/util/install.sh -l" "Installing wmediumd..."
+run_command "../mininet-wifi/util/install.sh -v" "Installing Openvswitch..."
+run_command "../mininet-wifi/util/install.sh -f" "Installing Openflow..."
+run_command "../mininet-wifi/util/install.sh -W" "Installing additional dependencies..."
+run_command "sudo python3 ../mininet-wifi/setup.py install" "Running Mininet-Wifi Setup..."
 
 run_command "sudo make install" "Compiling"
 
