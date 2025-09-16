@@ -11,7 +11,7 @@ import json
 description = """This lab demonstrates wireless drone hacking and compromise."""
 
 def drones():
-    spin = Halo(text='Loading', spinner='dots')
+	spin = Halo(text='Loading', spinner='dots', color='red')
     spin.start()
 
     net = Mininet_wifi()
