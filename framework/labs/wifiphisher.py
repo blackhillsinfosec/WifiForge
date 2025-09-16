@@ -9,7 +9,7 @@ import os
 description = """This lab uses Wifiphisher to carry out phishing-based attacks on Wi-Fi clients by creating rogue APs and tricking users into entering credentials or installing malware."""
 
 def WIFIPHISHER():
-    spin = Halo(text='Loading', spinner='dots')
+	spin = Halo(text='Loading', spinner='dots', color='red')
     spin.start()
     net = Mininet_wifi()
 
