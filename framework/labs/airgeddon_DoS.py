@@ -8,7 +8,7 @@ import os
 description = """This lab demonstrates how to use Airgeddon for executing denial-of-service (DoS) attacks on wireless networks by deauthenticating clients and disrupting connectivity."""
 
 def Airgeddon_DoS():
-    spin = Halo(text='Loading', spinner='dots')
+	spin = Halo(text='Loading', spinner='dots', color='red')
     spin.start()
 
     net = Mininet_wifi()
