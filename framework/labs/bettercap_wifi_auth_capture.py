@@ -8,7 +8,7 @@ import os
 description = """This lab shows how to use Bettercap to intercept and capture Wi-Fi authentication handshakes for later offline password cracking."""
 
 def BETTERCAP_WIFI_AUTH_CAPTURE():
-	spin = Halo(text='Loading', spinner='dots', color='red')
+    spin = Halo(text='Loading', spinner='dots', color='red')
     spin.start()
 
     net = Mininet_wifi()

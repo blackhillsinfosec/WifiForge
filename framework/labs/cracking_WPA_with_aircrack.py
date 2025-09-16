@@ -6,7 +6,7 @@ import os
 description = """This lab covers the use of Aircrack-ng to crack WPA/WPA2 handshakes by applying dictionary or brute-force attacks on captured authentication data."""
 
 def CRACKING_WPA_WITH_AIRCRACK():
-	spin = Halo(text='Loading', spinner='dots', color='red')
+    spin = Halo(text='Loading', spinner='dots', color='red')
     spin.start()
 
     net = Mininet_wifi()

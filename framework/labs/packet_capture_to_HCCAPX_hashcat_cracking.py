@@ -8,10 +8,9 @@ import os
 description = """This lab guides users through converting wireless handshake captures to the HCCAPX format and using Hashcat to crack WPA/WPA2 passwords with GPU acceleration."""
 
 def PACKET_CAPTURE_TO_HCCAPX_HASHCAT_CRACKING():
-	spin = Halo(text='Loading', spinner='dots', color='red')
+    spin = Halo(text='Loading', spinner='dots', color='red')
     spin.start()
     net = Mininet_wifi()
-    
 
     print('Creating Stations')
     attacker = net.addStation('Attacker', wlans=1)

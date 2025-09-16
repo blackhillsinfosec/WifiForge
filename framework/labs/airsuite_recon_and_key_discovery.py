@@ -8,7 +8,7 @@ import os
 description = """This lab uses the Aircrack-ng suite to perform wireless reconnaissance, collect handshake captures, and attempt key discovery for WEP and WPA/WPA2 networks."""
 
 def AIRSUITE_RECON_AND_KEY_DISCOVERY():
-	spin = Halo(text='Loading', spinner='dots', color='red')
+    spin = Halo(text='Loading', spinner='dots', color='red')
     spin.start()
     net = Mininet_wifi()
 

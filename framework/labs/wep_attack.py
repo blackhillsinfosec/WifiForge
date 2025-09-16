@@ -11,7 +11,7 @@ description = """This lab demonstrates how to exploit vulnerabilities in WEP enc
 def WEP_ATTACK():
 
     # BUILD NETWORK 
-	spin = Halo(text='Loading', spinner='dots', color='red')
+    spin = Halo(text='Loading', spinner='dots', color='red')
     spin.start()
 
     net = Mininet_wifi()
