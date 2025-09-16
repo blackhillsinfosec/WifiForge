@@ -41,7 +41,7 @@ def moveongraph(drone, position, data):
         print(f"{GREEN}Controlling {drone}!{RESET}")
         print(f"Use arrow keys to move. Press q to quit.")
         print(f"Current position: {BLUE}x={position[0]}, y={position[1]}{RESET}")
-        print(f"Original position: {BLUE}x={original[0]}, y={original[1]}{RESET}")
+        # print(f"Original position: {BLUE}x={original[0]}, y={original[1]}{RESET}")
         
         key = getkey()
         # print(f"You pressed: {repr(key)}")
