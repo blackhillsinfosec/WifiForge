@@ -35,7 +35,9 @@
 
 - [Installation Documentation](https://wififorge.github.io/Installation)
 - [Walkthroughs](https://wififorge.github.io/Lab-Walkthroughs/)
-- [Common Issues](https://wififorge.github.io/Troubleshooting)
+- [Troubleshooting](https://wififorge.github.io/Troubleshooting)
+- [Overview](https://wififorge.github.io/Overview)
+- [Contributing](https://wififorge.github.io/Development)
 
 ## References
 - https://mininet-wifi.github.io/
