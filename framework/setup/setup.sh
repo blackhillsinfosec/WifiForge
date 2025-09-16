@@ -14,7 +14,7 @@ RESET='\033[0m'
 os_name=$(lsb_release -si 2>/dev/null)
 os_version=$(lsb_release -sr 2>/dev/null)
 
-if [[ "$os_name" != "Kali" && "$os_name" != "Ubuntu" ]]; then
+if [[ "$os_name" != "Kali" ]]; then
     echo -e "${RED}✖ OS not supported... Please use the Docker container.${RESET}"
     echo -e "${CYAN}Detected OS: ${os_name} ${os_version}${RESET}"
     exit 1
