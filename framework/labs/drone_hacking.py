@@ -31,13 +31,9 @@ def drones():
             "port":     "4442"
         }
     }
-    
-    print("Creating Attacker Station...")
 
     attacker = net.addStation('Attacker', wlans=2)
     
-    print("Creating Drones and Controllers...")
-
     # drone 1 network
     st1 = net.addStation('st1', passwd=drones["dr1"]["password"], encrypt='wpa2', mac='00:00:00:00:00:01', ip='10.1.0.10/24')
     dr1 = net.addAccessPoint('dr1', ssid='DRONE1', passwd=drones["dr1"]["password"], encrypt='wpa2', mode='g', channel='3', failMode="standalone")
@@ -50,7 +46,6 @@ def drones():
     net.configureNodes()
 
     # build out the network
-    print('Configuring Network...')
     net.addLink(dr1, st1)
     net.addLink(dr2, st2)
 

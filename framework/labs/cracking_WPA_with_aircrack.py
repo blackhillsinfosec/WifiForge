@@ -11,7 +11,6 @@ def CRACKING_WPA_WITH_AIRCRACK():
 
     net = Mininet_wifi()
 
-    print('Creating Stations')
     attacker = net.addStation('Attacker', wlans=1)
 
     #secure_wifi
@@ -41,11 +40,8 @@ def CRACKING_WPA_WITH_AIRCRACK():
     #Hidden_SSID
     host9 = net.addStation('host9', passwd='iamhidden', encrypt='wpa2')
     ap4 = net.addAccessPoint('ap4', ssid='cantseeme', passwd='iamhidden', encrypt='wpa2', mode='g', channel='11')
-       
-    print('Creating the Access Point...')
     net.configureWifiNodes()
 
-    print('Adding Stations...')
     net.addLink(host1, ap0)
     net.addLink(host2, ap0)
 

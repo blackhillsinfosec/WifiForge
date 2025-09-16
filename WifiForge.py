@@ -166,9 +166,10 @@ def main():
                 current_row += 1
             elif key.code in (term.KEY_ENTER, '\n', '\r'):
                 os.system("clear")
-                # Optionally redirect output during function execution
-                sys.stdout = open(os.devnull, 'w')
                 functions[file_names[current_row]][1]()  # execute lab function
+                
+                # We move the stdout redirection here to ONLY silence `remove_old_variables`
+                sys.stdout = open(os.devnull, 'w')
                 remove_old_variables()
                 sys.stdout = sys.__stdout__
             elif key.lower() == 'q':

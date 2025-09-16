@@ -12,18 +12,14 @@ def WPS_PIXIE_DUST_ATTACK():
 
     net = Mininet_wifi()
 
-    print("Creating Stations...")
     attacker = net.addStation('Attacker', encrypt='wpa2')
     host1 = net.addStation('host1', encrypt='wpa2')
-    
-    print('Creating the Access Point...')
     ap1 = net.addAccessPoint('ap1', ssid="secure_wifi", mode="g", channel="1",
                              passwd='123456789a', encrypt='wpa2',
                              failMode="standalone", datapath='user', wps_state='2',
                              config_methods='label display push_button keypad')
     net.configureWifiNodes()
 
-    print("Adding Stations...")
     net.addLink(attacker, ap1)
     net.addLink(host1, ap1)
 
