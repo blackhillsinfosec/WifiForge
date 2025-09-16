@@ -7,7 +7,7 @@ import os
 description = """This lab involves cracking NTLM password hashes using John the Ripper, illustrating common techniques for offline Windows hash cracking."""
 
 def NTLM_JOHN_CRACK():
-	spin = Halo(text='Loading', spinner='dots')
+	spin = Halo(text='Loading', spinner='dots', color='red')
 	spin.start()
 	net = Mininet_wifi()
 
