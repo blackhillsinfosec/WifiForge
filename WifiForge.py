@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from blessed import Terminal
 from subprocess import DEVNULL
 import os
