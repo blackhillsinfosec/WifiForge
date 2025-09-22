@@ -10,6 +10,7 @@ RED     = "\033[91m"
 GREEN   = "\033[92m"
 BLUE    = "\033[94m"
 RESET   = "\033[0m"
+DRONE_PATH = "/tmp/drone-info.json"
 
 def clearscreen():
     os.system("clear")
@@ -34,10 +35,13 @@ def getkey():
 
 def moveongraph(drone, position, data):
 
+    original = [position[0], position[1]]
+
     while True:
         print(f"{GREEN}Controlling {drone}!{RESET}")
         print(f"Use arrow keys to move. Press q to quit.")
         print(f"Current position: {BLUE}x={position[0]}, y={position[1]}{RESET}")
+        # print(f"Original position: {BLUE}x={original[0]}, y={original[1]}{RESET}")
         
         key = getkey()
         # print(f"You pressed: {repr(key)}")
@@ -76,6 +80,25 @@ def moveongraph(drone, position, data):
         with open("/tmp/drone-info.json", "w") as f:
             json.dump(data, f)
 
+        # check for collisions
+        with open(DRONE_PATH) as f:
+            data = json.load(f)
+
+        # check for collisions with all other drones
+        for other, info in data.items():
+            if other == drone:
+                continue
+            if info["position"][:2] == position[:2]:  # compare only x, y
+                print(f"{RED}You've crashed!{RESET}")
+                # restore to original coordinates
+                position[:] = original
+                data[drone]["position"] = position
+                with open(DRONE_PATH, "w") as f:
+                    json.dump(data, f)
+                halt()
+                clearscreen()
+                break  # restart while loop
+
         clearscreen()
 
 def restoreinterfaces():
@@ -102,8 +125,8 @@ def main():
     clearscreen()
 
     # pull the drone passwords written by UAV
-    with open("/tmp/drone-info.json") as f:
-            data = json.load(f)
+    with open(DRONE_PATH) as f:
+        data = json.load(f)
     
     # pull the drone positions written by the drone_hacking script
     drones = list(data.keys())
@@ -154,6 +177,8 @@ def main():
                     else:
                         print(f"{RED}Incorrect password.{RESET}")
                         halt()
+                        clearscreen()
+                        continue
 
                 # after authentication (either pwned or correct pass)
                 print(f"{GREEN}Correct password for {drone}!{RESET}")
