@@ -123,7 +123,7 @@ for i in tqdm(range(int(9e6))):
 print("\n\n")
 print("[*] Success: a-wlan0 no longer controlled by NetworkManager")
 
-message = print_file_names(f"[*] WPA handshakes will be saved to /WifiForge/framework/loot/wpa_handshake_capture")
+message = print_file_names(f"[*] WPA handshakes will be saved to /WifiForge/framework/lab_materials/loot/wpa_handshake_capture")
 message = message[35:]
 print(message)
 print_file_names(f"Configuration file: /WifiForge/framework/loot/wpa_handshake_capture")
