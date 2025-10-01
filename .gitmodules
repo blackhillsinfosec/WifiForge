@@ -1,3 +1,6 @@
 [submodule "framework/mininet-wifi"]
 	path = framework/mininet-wifi
 	url = https://github.com/JsphByd/mininet-wifi
+[submodule "framework/airgeddon-WifiForge-Cloud"]
+	path = framework/airgeddon-WifiForge-Cloud
+	url = https://github.com/JsphByd/airgeddon-WifiForge-Cloud.git
