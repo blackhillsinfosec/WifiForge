@@ -1,5 +1,22 @@
 #!/usr/bin/env python3
 
+# Cap RLIMIT_NOFILE (max open file descriptors) before importing mn_wifi.
+# Mininet-wifi's internals iterate over every possible FD up to the soft
+# limit at startup. Distributions with a high default ulimit (Kali 2025+
+# sets RLIMIT_NOFILE to 1,048,576) cause that loop to spend minutes
+# iterating before any lab can start, manifesting to the user as labs
+# stuck at "Loading". 2048 is well above mininet's actual FD needs and
+# brings the iteration cost down to milliseconds.
+#
+# Equivalent to running `ulimit -n 2048` in the shell before launching
+# WifiForge; doing it here so users don't have to remember the workaround.
+#
+# See: https://github.com/blackhillsinfosec/WifiForge/issues/91
+import resource as _resource
+_soft, _hard = _resource.getrlimit(_resource.RLIMIT_NOFILE)
+if _soft > 2048:
+    _resource.setrlimit(_resource.RLIMIT_NOFILE, (2048, _hard))
+
 from blessed import Terminal
 from subprocess import DEVNULL
 import os
