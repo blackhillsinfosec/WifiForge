@@ -12,12 +12,16 @@
   &nbsp;
   <a href="https://x.com/BHinfoSecurity"><img src="https://img.shields.io/github/stars/blackhillsinfosec/WifiForge?style=flat-square&color=rgb(255%2C218%2C185)" alt="Wifi Forge Stars" /></a>
 
+<!-- TRemove Later -->
+
 # ⚠️ New Release - SDRForge ⚠️
 Shamless plug. Please go check out the next Forge tool we've just released!
 <div align="center">
 <a href="https://github.com/blackhillsinfosec/SDRForge"><img width="100%" src="https://github.com/blackhillsinfosec/WifiForge/blob/main/images/SDRForge-Ad.jpg" alt="SDR Forge Release Ad" /></a>
 <hr>
   
+<!-- Remove Later -->
+
 <p class="align center">
 <h4><code>WifiForge</code> provides a safe and legal environment for learning WiFi hacking. Based on the open source mininet-wifi, this project automatically sets up the networks and tools needed to run a variety of WiFi exploitation labs, removing the need for the overhead and hardware normally required to perform these attacks.</h4>
 </p>
