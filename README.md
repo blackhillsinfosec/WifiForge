@@ -92,46 +92,6 @@ The launcher discovers your labs, and when you pick one it builds the matching *
 
 Most recon, capture, and cracking labs share one canonical **practice range**: a messy airspace of co-existing networks — a legacy WEP AP, a WPA2 AP, a home network, a decoy, and a hidden SSID, each with client stations — so your tooling has something realistic to survey, deauthenticate, and attack. When a lab launches, WifiForge builds the network, waits for it to come up, and hands you a tmux session; when you exit, it tears everything down and cleans up leftover mininet state.
 
-<details>
-<summary><b>🖥️ &nbsp;Preview the lab menu</b></summary>
-
-<br>
-
-```text
-                               ▁ ▃ ▅ ▇ █ ▇ ▅ ▃ ▁
-
-       ██╗    ██╗██╗███████╗██╗███████╗ ██████╗ ██████╗  ██████╗ ███████╗
-       ██║    ██║██║██╔════╝██║██╔════╝██╔═══██╗██╔══██╗██╔════╝ ██╔════╝
-       ██║ █╗ ██║██║█████╗  ██║█████╗  ██║   ██║██████╔╝██║  ███╗█████╗
-       ██║███╗██║██║██╔══╝  ██║██╔══╝  ██║   ██║██╔══██╗██║   ██║██╔══╝
-       ╚███╔███╔╝██║██║     ██║██║     ╚██████╔╝██║  ██║╚██████╔╝███████╗
-        ╚══╝╚══╝ ╚═╝╚═╝     ╚═╝╚═╝      ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝
-
-                forge wireless attacks in a safe, legal sandbox
-
-  ╭─ Labs ─────────────────────────╮  ╭─ Evil Twin ────────────────────────────────╮
-  │ RECON                          │  │ Attack · ●●○ Intermediate                  │
-  │   Airsuite Recon & Key Di… ●●○ │  │                                            │
-  │   Bettercap Recon          ●○○ │  │ Stand up a rogue access point              │
-  │ CAPTURE                        │  │ impersonating a legitimate network to lure │
-  │   Bettercap Auth Capture   ●●○ │  │ clients into associating with you, a       │
-  │ CRACKING                       │  │ stepping stone to credential harvesting or │
-  │   Capture to HCCAPX / Has… ●●● │  │ content injection.                         │
-  │   Cracking WPA with Aircr… ●●○ │  │                                            │
-  │   NTLM John Crack          ●○○ │  │ TOOLS                                      │
-  │ ATTACK                         │  │  hostapd   mininet-wifi                    │
-  │   Airgeddon DoS            ●○○ │  │                                            │
-  │ › Evil Twin                ●●○ │  │                                            │
-  │   WEP Attack               ●○○ │  │                                            │
-  │   WPS Pixie Dust           ●●● │  │                                            │
-  │ PHISHING                       │  │                                            │
-  ╰────────────────────────────────╯  ╰────────────────────────────────────────────╯
-
-  ↑↓ navigate   ↵ launch   / search   q quit                        12 labs · v4.0.0
-```
-
-</details>
-
 <div align="right"><a href="#top"><sub>▲ back to top</sub></a></div>
 
 ---
