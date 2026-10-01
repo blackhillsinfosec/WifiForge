@@ -1,0 +1,78 @@
+[build-system]
+requires = ["hatchling>=1.21"]
+build-backend = "hatchling.build"
+
+[project]
+name = "wififorge"
+version = "4.0.0"
+description = "A safe, legal, sandboxed environment for learning WiFi hacking, built on mininet-wifi."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { file = "LICENSE" }
+authors = [{ name = "Black Hills Information Security" }]
+keywords = ["wifi", "security", "training", "mininet-wifi", "ctf", "lab", "wireless"]
+classifiers = [
+    "Environment :: Console",
+    "Intended Audience :: Education",
+    "Intended Audience :: Information Technology",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Topic :: Education",
+    "Topic :: Security",
+]
+
+# Runtime dependencies. Note: mininet-wifi itself is NOT a pip package; it is
+# installed out-of-band by ./install-system-deps.sh. Everything the menu and
+# lab harness need to *render and orchestrate* lives here.
+dependencies = [
+    "blessed>=1.20",
+    "halo>=0.0.31",
+    "libtmux>=0.37",
+]
+
+[project.optional-dependencies]
+# Labs that use these tools pull them in explicitly; keep the base install lean.
+plot = ["plotext>=5.2"]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.5",
+    "mypy>=1.10",
+    "types-setuptools",
+]
+
+[project.urls]
+Homepage = "https://github.com/blackhillsinfosec/WifiForge"
+Documentation = "https://wififorge.github.io/"
+Issues = "https://github.com/blackhillsinfosec/WifiForge/issues"
+
+# `wififorge` on the PATH after install; `wf` as a short alias.
+[project.scripts]
+wififorge = "wififorge.cli:main"
+wf = "wififorge.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/wififorge"]
+# Ensure non-.py lab data (wordlists, captures, helper scripts) ships in the wheel.
+artifacts = [
+    "src/wififorge/labs/materials/**",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+src = ["src", "tests"]
+# Lab materials are standalone scripts / data bundled for learners, not library code.
+extend-exclude = ["src/wififorge/labs/materials"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "C4"]
+ignore = ["E501"]  # long ASCII-art / description lines are fine
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_unused_ignores = true
+ignore_missing_imports = true   # mn_wifi / mininet have no stubs
