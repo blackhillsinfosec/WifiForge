@@ -63,38 +63,6 @@ Traditional wireless practice means adapters that support monitor mode and injec
 
 ---
 
-## How It Works
-
-The launcher discovers your labs, and when you pick one it builds the matching **mininet-wifi** topology — virtual access points and client stations wired together — then opens a **tmux** session with one pane per node so you can drive the attack from the attacker station while the targets generate traffic.
-
-```text
-            ┌───────────────────────────────────────────────┐
-            │                WifiForge (TUI)                 │
-            │      lab discovery  +  lifecycle manager       │
-            └───────────────────────┬───────────────────────┘
-                                     │ builds the network, opens tmux, tears down
-                                     ▼
-   ┌──────────────── mininet-wifi virtual airspace ──────────────────┐
-   │                                                                  │
-   │    (( ap1 ))      (( ap2 ))      (( ap3 ))   …   virtual APs      │
-   │        │              │              │           (hostapd)       │
-   │     station        station        station   …   mac80211_hwsim   │
-   │                                                                  │
-   │     Attacker  ○ ── scans · deauths · captures · cracks ──►        │
-   └─────────────────────────────┬────────────────────────────────────┘
-                                  │ one pane per node (nsenter)
-                                  ▼
-                   ┌───────────────── tmux ──────────────────┐
-                   │   Attacker  │  host1  │  host2  │  …     │
-                   └─────────────────────────────────────────┘
-```
-
-Most recon, capture, and cracking labs share one canonical **practice range**: a messy airspace of co-existing networks — a legacy WEP AP, a WPA2 AP, a home network, a decoy, and a hidden SSID, each with client stations — so your tooling has something realistic to survey, deauthenticate, and attack. When a lab launches, WifiForge builds the network, waits for it to come up, and hands you a tmux session; when you exit, it tears everything down and cleans up leftover mininet state.
-
-<div align="right"><a href="#top"><sub>▲ back to top</sub></a></div>
-
----
-
 ## Quick Start
 
 WifiForge needs a **Linux host** with mininet-wifi and the wireless tooling the labs drive. Clone the repo, install the system dependencies once, then install the launcher:
