@@ -12,7 +12,6 @@
 <br>
 <br>
 
-<a href="https://github.com/blackhillsinfosec/WifiForge/actions"><img src="https://img.shields.io/github/actions/workflow/status/blackhillsinfosec/WifiForge/ci.yml?style=for-the-badge&logo=githubactions&logoColor=white&label=build" alt="Build" /></a>
 <img src="https://img.shields.io/badge/license-Apache_2.0-D22128?style=for-the-badge" alt="License" />
 <img src="https://img.shields.io/badge/python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python" />
 <img src="https://img.shields.io/badge/platform-Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black" alt="Linux" />
