@@ -5,7 +5,7 @@
   <img width="78%" src="images/WifiForgeVersion2.png" alt="WifiForge" />
 </a>
 
-### A complete WiFi hacking lab — virtual, sandboxed, no radio required.
+### A complete WiFi hacking lab - virtual, sandboxed, no radio required.
 
 <samp>mininet-wifi virtual networks in software · spin up a wireless-attack lab with a single command</samp>
 
@@ -39,9 +39,9 @@
 
 ## Overview
 
-**WifiForge** is a terminal-driven framework for building **fully virtual** WiFi networks for security research and training. It gives you a safe, legal, sandboxed place to practice real wireless attacks — recon, handshake capture, cracking, evil twins, WPS, and more — without any of the usual setup.
+**WifiForge** is a terminal-driven framework for building **fully virtual** WiFi networks for security research and training. It gives you a safe, legal, sandboxed place to practice real wireless attacks, recon, handshake capture, cracking, evil twins, WPS, and more, without any of the usual setup.
 
-Traditional wireless practice means adapters that support monitor mode and injection, spare access points, antennas, and a space where it's legal to transmit. WifiForge removes all of it: the radios are [mininet-wifi](https://github.com/intrig-unicamp/mininet-wifi) virtual interfaces (`mac80211_hwsim`), so an entire airspace — access points, client stations, and your attacker — runs in software with nothing sent over the air. Pick a lab from the menu, and WifiForge builds the network, drops you into a per-node terminal, and lets you run the attack hands-on.
+Traditional wireless practice means adapters that support monitor mode and injection, spare access points, antennas, and a space where it's legal to transmit. WifiForge removes all of it: the radios are [mininet-wifi](https://github.com/intrig-unicamp/mininet-wifi) virtual interfaces (`mac80211_hwsim`), so an entire airspace, access points, client stations, and your attacker, runs in software with nothing sent over the air. Pick a lab from the menu, and WifiForge builds the network, drops you into a per-node terminal, and lets you run the attack hands-on.
 
 > [!NOTE]
 > WifiForge creates only virtual networks confined to your machine. Use it only in environments you own or are explicitly authorized to test.
