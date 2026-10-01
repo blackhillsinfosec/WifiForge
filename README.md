@@ -1,18 +1,104 @@
-# WifiForge
+<a name="top"></a>
+<div align="center">
 
-**A safe, legal, sandboxed environment for learning WiFi hacking.**
+<a href="https://github.com/blackhillsinfosec/WifiForge">
+  <img width="78%" src="images/WifiForgeVersion2.png" alt="WifiForge" />
+</a>
 
-WifiForge spins up virtual wireless networks with
-[mininet-wifi](https://github.com/intrig-unicamp/mininet-wifi) and drops you into
-hands-on labs — recon, handshake capture, cracking, evil twins, WPS attacks and
-more — so you can practice real wireless-security techniques without real
-hardware, without a lab full of radios, and without touching anyone else's
-network.
+### A complete WiFi hacking lab — virtual, sandboxed, no radio required.
 
-Brought to you by [Black Hills Information Security](https://www.blackhillsinfosec.com/).
+<samp>mininet-wifi virtual networks in software · spin up a wireless-attack lab with a single command</samp>
 
+<br>
+<br>
+
+<a href="https://github.com/blackhillsinfosec/WifiForge/actions"><img src="https://img.shields.io/github/actions/workflow/status/blackhillsinfosec/WifiForge/ci.yml?style=for-the-badge&logo=githubactions&logoColor=white&label=build" alt="Build" /></a>
+<img src="https://img.shields.io/badge/license-Apache_2.0-D22128?style=for-the-badge" alt="License" />
+<img src="https://img.shields.io/badge/python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python" />
+<img src="https://img.shields.io/badge/platform-Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black" alt="Linux" />
+<br>
+<img src="https://img.shields.io/badge/radio-mininet--wifi_·_mac80211__hwsim-00857C?style=for-the-badge" alt="mininet-wifi" />
+<img src="https://img.shields.io/badge/ui-blessed_·_tmux-FF6600?style=for-the-badge" alt="blessed" />
+<img src="https://img.shields.io/badge/install-pip_·_pyproject-2496ED?style=for-the-badge&logo=python&logoColor=white" alt="pip" />
+<a href="https://discord.com/invite/bhis"><img src="https://img.shields.io/discord/967097582721572934?style=for-the-badge&logo=discord&logoColor=white&label=discord&color=5865F2" alt="Discord" /></a>
+
+<br>
+<br>
+
+<a href="#overview"><b>Overview</b></a> &nbsp;·&nbsp;
+<a href="https://wififorge.github.io/"><b>Lab Walkthroughs</b></a> &nbsp;·&nbsp;
+<a href="#how-it-works"><b>How It Works</b></a> &nbsp;·&nbsp;
+<a href="#quick-start"><b>Quick Start</b></a> &nbsp;·&nbsp;
+<a href="#writing-labs"><b>Writing Labs</b></a> &nbsp;·&nbsp;
+<a href="#labs"><b>Labs</b></a> &nbsp;·&nbsp;
+<a href="#requirements"><b>Requirements</b></a> &nbsp;·&nbsp;
+<a href="#safety-and-legal-use"><b>Safety</b></a>
+
+</div>
+
+---
+
+## Overview
+
+**WifiForge** is a terminal-driven framework for building **fully virtual** WiFi networks for security research and training. It gives you a safe, legal, sandboxed place to practice real wireless attacks — recon, handshake capture, cracking, evil twins, WPS, and more — without any of the usual setup.
+
+Traditional wireless practice means adapters that support monitor mode and injection, spare access points, antennas, and a space where it's legal to transmit. WifiForge removes all of it: the radios are [mininet-wifi](https://github.com/intrig-unicamp/mininet-wifi) virtual interfaces (`mac80211_hwsim`), so an entire airspace — access points, client stations, and your attacker — runs in software with nothing sent over the air. Pick a lab from the menu, and WifiForge builds the network, drops you into a per-node terminal, and lets you run the attack hands-on.
+
+> [!NOTE]
+> WifiForge creates only virtual networks confined to your machine. Use it only in environments you own or are explicitly authorized to test.
+
+<br>
+
+<table>
+<tr>
+<td align="center" width="33%">📡<br><br><b>No hardware</b><br>No WiFi adapter, access point, antenna, or RF — the radios are mininet-wifi's virtual <code>mac80211_hwsim</code> interfaces.</td>
+<td align="center" width="33%">📦<br><br><b>pip-installable</b><br>A proper <code>pyproject.toml</code> package puts <code>wififorge</code> (and a short <code>wf</code>) on your PATH.</td>
+<td align="center" width="33%">📝<br><br><b>Labs as modules</b><br>A lab is a small Python file; drop it in and WifiForge discovers and lists it automatically.</td>
+</tr>
+<tr>
+<td align="center" width="33%">🖥️<br><br><b>Beautiful menu</b><br>A categorised, searchable terminal UI with difficulty ratings, tool badges, and live descriptions.</td>
+<td align="center" width="33%">🧩<br><br><b>Robust loading</b><br>Each lab is imported in isolation, so one broken lab can't take down the menu — it just shows disabled.</td>
+<td align="center" width="33%">🔬<br><br><b>See the attack</b><br>Work node-by-node in tmux and watch recon, capture, cracking, and rogue-AP attacks unfold.</td>
+</tr>
+</table>
+
+---
+
+## How It Works
+
+The launcher discovers your labs, and when you pick one it builds the matching **mininet-wifi** topology — virtual access points and client stations wired together — then opens a **tmux** session with one pane per node so you can drive the attack from the attacker station while the targets generate traffic.
+
+```text
+            ┌───────────────────────────────────────────────┐
+            │                WifiForge (TUI)                 │
+            │      lab discovery  +  lifecycle manager       │
+            └───────────────────────┬───────────────────────┘
+                                     │ builds the network, opens tmux, tears down
+                                     ▼
+   ┌──────────────── mininet-wifi virtual airspace ──────────────────┐
+   │                                                                  │
+   │    (( ap1 ))      (( ap2 ))      (( ap3 ))   …   virtual APs      │
+   │        │              │              │           (hostapd)       │
+   │     station        station        station   …   mac80211_hwsim   │
+   │                                                                  │
+   │     Attacker  ○ ── scans · deauths · captures · cracks ──►        │
+   └─────────────────────────────┬────────────────────────────────────┘
+                                  │ one pane per node (nsenter)
+                                  ▼
+                   ┌───────────────── tmux ──────────────────┐
+                   │   Attacker  │  host1  │  host2  │  …     │
+                   └─────────────────────────────────────────┘
 ```
-                       ▁ ▃ ▅ ▇ █ ▇ ▅ ▃ ▁
+
+Most recon, capture, and cracking labs share one canonical **practice range**: a messy airspace of co-existing networks — a legacy WEP AP, a WPA2 AP, a home network, a decoy, and a hidden SSID, each with client stations — so your tooling has something realistic to survey, deauthenticate, and attack. When a lab launches, WifiForge builds the network, waits for it to come up, and hands you a tmux session; when you exit, it tears everything down and cleans up leftover mininet state.
+
+<details>
+<summary><b>🖥️ &nbsp;Preview the lab menu</b></summary>
+
+<br>
+
+```text
+                               ▁ ▃ ▅ ▇ █ ▇ ▅ ▃ ▁
 
        ██╗    ██╗██╗███████╗██╗███████╗ ██████╗ ██████╗  ██████╗ ███████╗
        ██║    ██║██║██╔════╝██║██╔════╝██╔═══██╗██╔══██╗██╔════╝ ██╔════╝
@@ -22,109 +108,70 @@ Brought to you by [Black Hills Information Security](https://www.blackhillsinfos
         ╚══╝╚══╝ ╚═╝╚═╝     ╚═╝╚═╝      ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝
 
                 forge wireless attacks in a safe, legal sandbox
+
+  ╭─ Labs ─────────────────────────╮  ╭─ Evil Twin ────────────────────────────────╮
+  │ RECON                          │  │ Attack · ●●○ Intermediate                  │
+  │   Airsuite Recon & Key Di… ●●○ │  │                                            │
+  │   Bettercap Recon          ●○○ │  │ Stand up a rogue access point              │
+  │ CAPTURE                        │  │ impersonating a legitimate network to lure │
+  │   Bettercap Auth Capture   ●●○ │  │ clients into associating with you, a       │
+  │ CRACKING                       │  │ stepping stone to credential harvesting or │
+  │   Capture to HCCAPX / Has… ●●● │  │ content injection.                         │
+  │   Cracking WPA with Aircr… ●●○ │  │                                            │
+  │   NTLM John Crack          ●○○ │  │ TOOLS                                      │
+  │ ATTACK                         │  │  hostapd   mininet-wifi                    │
+  │   Airgeddon DoS            ●○○ │  │                                            │
+  │ › Evil Twin                ●●○ │  │                                            │
+  │   WEP Attack               ●○○ │  │                                            │
+  │   WPS Pixie Dust           ●●● │  │                                            │
+  │ PHISHING                       │  │                                            │
+  ╰────────────────────────────────╯  ╰────────────────────────────────────────────╯
+
+  ↑↓ navigate   ↵ launch   / search   q quit                        12 labs · v4.0.0
 ```
+
+</details>
+
+<div align="right"><a href="#top"><sub>▲ back to top</sub></a></div>
 
 ---
 
-## What's new in 4.0
+## Quick Start
 
-WifiForge 4.0 is a ground-up refactor:
-
-- **Modern, pretty TUI** — a categorised, searchable menu with difficulty
-  ratings, per-lab tool badges, live descriptions, scrolling, and a responsive
-  layout that degrades gracefully on small terminals.
-- **`pip`-installable** — a proper `pyproject.toml` package with a `wififorge`
-  (and short `wf`) command on your `PATH`. No more running a script from a fixed
-  directory.
-- **Robust lab loading** — each lab is discovered and imported in isolation, so a
-  single broken lab can no longer crash the whole menu; it simply shows up
-  disabled with the reason why.
-- **Browse anywhere** — the menu and `--list` work even on machines without
-  mininet-wifi installed, because the heavy dependencies are only imported when a
-  lab is actually launched.
-- **Drop-in labs** — add your own lab modules without touching the package
-  (`--labs-dir` / `$WIFIFORGE_LABS`).
-
-## Requirements
-
-- Linux (tested on Kali/Debian/Ubuntu). Labs need root.
-- Python 3.9+
-- System tooling installed by `./install-system-deps.sh` — most importantly
-  **mininet-wifi**, plus the wireless-security tools the labs drive (aircrack-ng,
-  bettercap, john, hashcat, reaver, tmux, and friends).
-
-## Install
+WifiForge needs a **Linux host** with mininet-wifi and the wireless tooling the labs drive. Clone the repo, install the system dependencies once, then install the launcher:
 
 ```bash
-# 1. System dependencies (mininet-wifi + lab tools). Run once, as root.
+git clone https://github.com/blackhillsinfosec/WifiForge.git
+cd WifiForge
+
+# System dependencies (mininet-wifi + lab tools). Run once, as root.
 sudo ./install-system-deps.sh
 
-# 2. The WifiForge package itself.
-pip install .
-#   …or, to keep it isolated from system Python:
-pipx install .
+# The WifiForge package itself.
+pip install .            # or, to keep it isolated:  pipx install .
 ```
 
-For development:
+Launch the menu, pick a lab, and press <kbd>Enter</kbd>:
 
 ```bash
-pip install -e '.[dev]'
+sudo wififorge           # or:  sudo python3 -m wififorge
 ```
 
-## Usage
+Navigate with <kbd>↑</kbd> <kbd>↓</kbd> (or <kbd>j</kbd>/<kbd>k</kbd>) &nbsp;·&nbsp; launch with <kbd>Enter</kbd> &nbsp;·&nbsp; search with <kbd>/</kbd> &nbsp;·&nbsp; quit with <kbd>q</kbd>.
 
-```bash
-sudo wififorge            # launch the menu (root required to build networks)
-wififorge --list          # list labs and exit (no root / no mininet needed)
-wififorge --version
-```
+> [!TIP]
+> You can browse without root or even without mininet installed: `wififorge --list` prints every discovered lab, and `wififorge --allow-non-root` opens the menu for browsing (labs won't build). Root is only needed to actually create the virtual network.
 
-Useful flags:
+> [!IMPORTANT]
+> The **first run builds mininet-wifi**, which compiles components from source and can take several minutes. Later runs are cached. Labs create network namespaces and interfaces, so launching one requires `sudo`.
 
-| Flag                 | Purpose                                                            |
-| -------------------- | ----------------------------------------------------------------- |
-| `--list`             | Print the discovered labs and exit.                               |
-| `--labs-dir DIR`     | Also load lab `.py` files from `DIR` (see **Writing a lab**).      |
-| `--allow-non-root`   | Skip the root check to browse the menu (labs won't build).        |
+<div align="right"><a href="#top"><sub>▲ back to top</sub></a></div>
 
-### Menu keys
+---
 
-| Key                    | Action                        |
-| ---------------------- | ----------------------------- |
-| `↑` `↓` / `k` `j`      | Move selection                |
-| `PgUp` `PgDn`          | Jump a page                   |
-| `Home` `End`          | First / last lab              |
-| `Enter`                | Launch the selected lab       |
-| `/`                    | Search; `Esc` clears          |
-| `q` / `Esc`            | Quit                          |
+## Writing Labs
 
-When a lab launches, WifiForge builds the virtual network and opens a **tmux**
-session with one pane per node (the attacker station, target hosts, etc.). Work
-through the lab there; when you exit tmux, WifiForge tears the network down and
-cleans up.
-
-## Labs
-
-| Lab                              | Category | Difficulty    |
-| -------------------------------- | -------- | ------------- |
-| Airsuite Recon & Key Discovery   | Recon    | Intermediate  |
-| Bettercap Recon                  | Recon    | Beginner      |
-| Bettercap Auth Capture           | Capture  | Intermediate  |
-| NTLM John Crack                  | Cracking | Beginner      |
-| Cracking WPA with Aircrack       | Cracking | Intermediate  |
-| Capture to HCCAPX / Hashcat      | Cracking | Advanced      |
-| Airgeddon DoS                    | Attack   | Beginner      |
-| WEP Attack                       | Attack   | Beginner      |
-| Evil Twin                        | Attack   | Intermediate  |
-| WPS Pixie Dust                   | Attack   | Advanced      |
-| Wifiphisher                      | Phishing | Intermediate  |
-| Drone Hacking                    | Misc     | Advanced      |
-
-## Writing a lab
-
-A lab is just a Python module exposing a `LAB` description and a `run()`
-function. Drop it in `src/wififorge/labs/` (bundled) or any directory you pass
-with `--labs-dir`:
+A lab is a small Python module in `labs/`, discovered automatically at startup. You declare its metadata and a `run()` entry point; the shared harness handles the build → start → tmux → teardown lifecycle for you.
 
 ```python
 from wififorge.labs._schema import LabMeta, Category, Difficulty
@@ -145,32 +192,188 @@ def _topology(net):
                              encrypt="wpa2", mode="g", channel="1")
     net.configureWifiNodes()
     net.addLink(host1, ap1)
-    return [ap1]            # the APs to start
+    return [ap1]                         # the APs to start
 
 def run():
     run_lab("MY_LAB", ["Attacker", "host1"], _topology)
 ```
 
-The shared `run_lab` helper handles the build/start/tmux/teardown lifecycle, and
-the common multi-network "practice range" used by the recon/capture/cracking labs
-is available as `from wififorge.labs._scenarios import standard_range`.
+| Piece | What it does |
+| :-- | :-- |
+| `LAB = LabMeta(...)` | Title, category, difficulty, and tools shown in the menu |
+| `run()` | The entry point WifiForge calls when the lab is launched |
+| `run_lab(name, panes, topology)` | Builds the network, opens a tmux pane per node, tears down after |
+| `standard_range(net)` | Import from `_scenarios` to reuse the shared multi-network practice range |
+
+Drop the file in `src/wififorge/labs/` to bundle it, or point WifiForge at an external directory with `--labs-dir DIR` (or `$WIFIFORGE_LABS`) — no reinstall needed. A lab that fails to import doesn't crash the menu; it appears disabled with the reason why.
+
+<div align="right"><a href="#top"><sub>▲ back to top</sub></a></div>
+
+---
+
+## Labs
+
+| Lab | Category | Difficulty |
+| :-- | :-- | :-- |
+| Airsuite Recon & Key Discovery | Recon | ●●○ Intermediate |
+| Bettercap Recon | Recon | ●○○ Beginner |
+| Bettercap Auth Capture | Capture | ●●○ Intermediate |
+| NTLM John Crack | Cracking | ●○○ Beginner |
+| Cracking WPA with Aircrack | Cracking | ●●○ Intermediate |
+| Capture to HCCAPX / Hashcat | Cracking | ●●● Advanced |
+| Airgeddon DoS | Attack | ●○○ Beginner |
+| WEP Attack | Attack | ●○○ Beginner |
+| Evil Twin | Attack | ●●○ Intermediate |
+| WPS Pixie Dust | Attack | ●●● Advanced |
+| Wifiphisher | Phishing | ●●○ Intermediate |
+| Drone Hacking | Misc | ●●● Advanced |
+
+<details>
+<summary><b>Command-line usage</b></summary>
+
+<br>
+
+The install provides `wififorge` and the short alias `wf`:
+
+| Command | Purpose |
+| :-- | :-- |
+| `sudo wififorge` | Launch the lab menu |
+| `wififorge --list` | Print discovered labs and exit (no root / no mininet needed) |
+| `wififorge --labs-dir DIR` | Also load lab `.py` files from `DIR` |
+| `wififorge --allow-non-root` | Skip the root check to browse the menu |
+| `wififorge --version` | Show the version |
+
+</details>
+
+<details>
+<summary><b>Project layout</b></summary>
+
+<br>
+
+```text
+WifiForge/
+├── pyproject.toml              # project metadata, dependencies, entry points, tooling
+├── install-system-deps.sh      # apt packages + mininet-wifi (the non-pip parts)
+├── src/wififorge/              # the Python package
+│   ├── __init__.py             #   centralised version
+│   ├── __main__.py             #   `python -m wififorge` -> lab menu
+│   ├── cli.py                  #   argparse entry point + lab launch
+│   ├── banner.py               #   ASCII logo + render helpers
+│   ├── theme.py                #   capability-aware colour palette
+│   ├── runtime.py              #   root check, FD-limit fix, mininet cleanup
+│   ├── tmux.py                 #   one tmux pane per node (nsenter)
+│   ├── labs/                   #   drop-in labs, auto-discovered
+│   │   ├── _schema.py          #     LabMeta + Category/Difficulty
+│   │   ├── _harness.py         #     build/start/tmux/teardown lifecycle
+│   │   ├── _scenarios.py       #     shared practice-range topology
+│   │   ├── loader.py           #     isolated, lazy lab discovery
+│   │   ├── materials/          #     bundled wordlists, captures, helper scripts
+│   │   └── *.py                #     the 12 labs
+│   └── tui/                    #   the terminal UI
+│       ├── geometry.py         #     responsive layout math
+│       ├── widgets.py          #     rounded boxes, badges, wrapping
+│       └── menu.py             #     the searchable, categorised menu
+└── tests/                      # unit tests (no root / mininet required)
+```
+
+</details>
+
+<div align="right"><a href="#top"><sub>▲ back to top</sub></a></div>
+
+---
+
+## Requirements
+
+Because the radios are virtual, there is **no hardware to buy**.
+
+| Component | Needed |
+| :-- | :-- |
+| **Host** | Linux — mininet-wifi uses `mac80211_hwsim`, network namespaces, and `NET_ADMIN` (macOS/Windows can't provide these) |
+| **mininet-wifi** | Installed by `./install-system-deps.sh`, along with the lab tooling |
+| **Tooling** | aircrack-ng, bettercap, john, hashcat/hcxtools, reaver/bully, hostapd, tmux, and friends |
+| **Python** | 3.9 or newer (for the launcher) |
+| **Privileges** | `sudo` to build networks; browsing the menu / `--list` needs neither root nor mininet |
+| **Hardware** | None — no WiFi adapter, access point, antenna, or RF |
+
+<div align="right"><a href="#top"><sub>▲ back to top</sub></a></div>
+
+---
+
+## Safety and Legal Use
+
+> [!WARNING]
+> **WifiForge is for authorized security research and education only.** The techniques you learn here apply to real wireless networks — use them only on networks, devices, and clients you own or are explicitly authorized to test. Never interfere with networks you don't have permission to touch.
+
+> [!NOTE]
+> **WifiForge does not transmit RF.** The entire radio path is mininet-wifi's `mac80211_hwsim` virtual interfaces running on your machine, so there is no spectrum use and nothing is sent over the air — the lab itself is safe and legal to run on your own computer.
+
+---
+
+## Troubleshooting
+
+<details>
+<summary><b>Common issues</b></summary>
+
+<br>
+
+| Symptom | Fix |
+| :-- | :-- |
+| `WifiForge must be run as root` | Launch with `sudo wififorge`; or `--allow-non-root` to browse only |
+| `'mn' (mininet) was not found` | Run `sudo ./install-system-deps.sh` first |
+| A lab shows as *failed to load* | Open it to see the import error; usually a missing system tool — select another or fix the dependency |
+| `Terminal too small` | Enlarge the window; the menu needs a little room and will redraw as it grows |
+| A lab hangs on "Building" | On high-ulimit distros this is the FD-limit issue WifiForge caps automatically; make sure you're on the current version |
+| Won't run on macOS / Windows | Use a Linux host — `mac80211_hwsim` and network namespaces are required |
+
+When opening an issue, please include your OS, Python and mininet-wifi versions, the WifiForge commit, your install method, relevant logs (e.g. a lab's failure output), and steps to reproduce.
+
+</details>
+
+---
 
 ## Development
 
 ```bash
 pip install -e '.[dev]'
-pytest          # unit tests (no root / mininet required)
+pytest          # unit tests — run headlessly, no root or mininet needed
 ruff check .    # lint
 mypy src        # type-check
 ```
 
-## Legal
+The menu renders as a pure function of state and terminal size, and the labs import mininet lazily, so the whole test suite runs on any machine without root or mininet-wifi.
 
-WifiForge is for **education and authorised testing only**. Every network it
-creates is virtual and confined to your machine. Do not use the techniques you
-learn here against networks you do not own or do not have explicit permission to
-test.
+---
 
-## License
+## Contributing
 
-See [LICENSE](LICENSE).
+Contributions are welcome — a new lab can be as small as a single Python file.
+
+1. Fork the repository.
+2. Create a feature branch.
+3. Make your changes.
+4. Test them in an isolated environment.
+5. Open a pull request.
+
+For larger changes, opening an issue first helps coordinate development.
+
+---
+
+## References
+
+<div align="center">
+
+[**WifiForge**](https://github.com/blackhillsinfosec/WifiForge) &nbsp;·&nbsp;
+[**mininet-wifi**](https://github.com/intrig-unicamp/mininet-wifi) &nbsp;·&nbsp;
+[**Black Hills InfoSec**](https://www.blackhillsinfosec.com/) &nbsp;·&nbsp;
+[**tmux**](https://github.com/tmux/tmux) &nbsp;·&nbsp;
+[**Aircrack-ng**](https://www.aircrack-ng.org/)
+
+<br>
+
+<sub>Made with ❤️ by <b>Black Hills Information Security</b></sub>
+
+<br>
+
+<a href="#top"><sub>▲ back to top</sub></a>
+
+</div>
