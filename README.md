@@ -2,7 +2,7 @@
 <div align="center">
 
 <a href="https://github.com/blackhillsinfosec/WifiForge">
-  <img width="78%" src="images/WifiForgeVersion2.png" alt="WifiForge" />
+  <img width="78%" src="images/logo-wf.jpg" alt="WifiForge" />
 </a>
 
 ### A complete WiFi hacking lab - virtual, sandboxed, no radio required.
