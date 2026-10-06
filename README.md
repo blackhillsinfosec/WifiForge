@@ -50,13 +50,13 @@ Traditional wireless practice means adapters that support monitor mode and injec
 
 <table>
 <tr>
-<td align="center" width="33%">📡<br><br><b>No hardware</b><br>No WiFi adapter, access point, antenna, or RF — the radios are mininet-wifi's virtual <code>mac80211_hwsim</code> interfaces.</td>
+<td align="center" width="33%">📡<br><br><b>No hardware</b><br>No WiFi adapter, access point, antenna, or RF , the radios are mininet-wifi's virtual <code>mac80211_hwsim</code> interfaces.</td>
 <td align="center" width="33%">📦<br><br><b>pip-installable</b><br>A proper <code>pyproject.toml</code> package puts <code>wififorge</code> (and a short <code>wf</code>) on your PATH.</td>
 <td align="center" width="33%">📝<br><br><b>Labs as modules</b><br>A lab is a small Python file; drop it in and WifiForge discovers and lists it automatically.</td>
 </tr>
 <tr>
 <td align="center" width="33%">🖥️<br><br><b>Beautiful menu</b><br>A categorised, searchable terminal UI with difficulty ratings, tool badges, and live descriptions.</td>
-<td align="center" width="33%">🧩<br><br><b>Robust loading</b><br>Each lab is imported in isolation, so one broken lab can't take down the menu — it just shows disabled.</td>
+<td align="center" width="33%">🧩<br><br><b>Robust loading</b><br>Each lab is imported in isolation, so one broken lab can't take down the menu , it just shows disabled.</td>
 <td align="center" width="33%">🔬<br><br><b>See the attack</b><br>Work node-by-node in tmux and watch recon, capture, cracking, and rogue-AP attacks unfold.</td>
 </tr>
 </table>
@@ -132,7 +132,7 @@ def run():
 | `run_lab(name, panes, topology)` | Builds the network, opens a tmux pane per node, tears down after |
 | `standard_range(net)` | Import from `_scenarios` to reuse the shared multi-network practice range |
 
-Drop the file in `src/wififorge/labs/` to bundle it, or point WifiForge at an external directory with `--labs-dir DIR` (or `$WIFIFORGE_LABS`) — no reinstall needed. A lab that fails to import doesn't crash the menu; it appears disabled with the reason why.
+Drop the file in `src/wififorge/labs/` to bundle it, or point WifiForge at an external directory with `--labs-dir DIR` (or `$WIFIFORGE_LABS`) , no reinstall needed. A lab that fails to import doesn't crash the menu; it appears disabled with the reason why.
 
 <div align="right"><a href="#top"><sub>▲ back to top</sub></a></div>
 
@@ -215,12 +215,12 @@ Because the radios are virtual, there is **no hardware to buy**.
 
 | Component | Needed |
 | :-- | :-- |
-| **Host** | Linux — mininet-wifi uses `mac80211_hwsim`, network namespaces, and `NET_ADMIN` (macOS/Windows can't provide these) |
+| **Host** | Linux , mininet-wifi uses `mac80211_hwsim`, network namespaces, and `NET_ADMIN` (macOS/Windows can't provide these) |
 | **mininet-wifi** | Installed by `./install-system-deps.sh`, along with the lab tooling |
 | **Tooling** | aircrack-ng, bettercap, john, hashcat/hcxtools, reaver/bully, hostapd, tmux, and friends |
 | **Python** | 3.9 or newer (for the launcher) |
 | **Privileges** | `sudo` to build networks; browsing the menu / `--list` needs neither root nor mininet |
-| **Hardware** | None — no WiFi adapter, access point, antenna, or RF |
+| **Hardware** | None , no WiFi adapter, access point, antenna, or RF |
 
 <div align="right"><a href="#top"><sub>▲ back to top</sub></a></div>
 
@@ -229,10 +229,10 @@ Because the radios are virtual, there is **no hardware to buy**.
 ## Safety and Legal Use
 
 > [!WARNING]
-> **WifiForge is for authorized security research and education only.** The techniques you learn here apply to real wireless networks — use them only on networks, devices, and clients you own or are explicitly authorized to test. Never interfere with networks you don't have permission to touch.
+> **WifiForge is for authorized security research and education only.** The techniques you learn here apply to real wireless networks , use them only on networks, devices, and clients you own or are explicitly authorized to test. Never interfere with networks you don't have permission to touch.
 
 > [!NOTE]
-> **WifiForge does not transmit RF.** The entire radio path is mininet-wifi's `mac80211_hwsim` virtual interfaces running on your machine, so there is no spectrum use and nothing is sent over the air — the lab itself is safe and legal to run on your own computer.
+> **WifiForge does not transmit RF.** The entire radio path is mininet-wifi's `mac80211_hwsim` virtual interfaces running on your machine, so there is no spectrum use and nothing is sent over the air , the lab itself is safe and legal to run on your own computer.
 
 ---
 
@@ -247,41 +247,14 @@ Because the radios are virtual, there is **no hardware to buy**.
 | :-- | :-- |
 | `WifiForge must be run as root` | Launch with `sudo wififorge`; or `--allow-non-root` to browse only |
 | `'mn' (mininet) was not found` | Run `sudo ./install-system-deps.sh` first |
-| A lab shows as *failed to load* | Open it to see the import error; usually a missing system tool — select another or fix the dependency |
+| A lab shows as *failed to load* | Open it to see the import error; usually a missing system tool , select another or fix the dependency |
 | `Terminal too small` | Enlarge the window; the menu needs a little room and will redraw as it grows |
 | A lab hangs on "Building" | On high-ulimit distros this is the FD-limit issue WifiForge caps automatically; make sure you're on the current version |
-| Won't run on macOS / Windows | Use a Linux host — `mac80211_hwsim` and network namespaces are required |
+| Won't run on macOS / Windows | Use a Linux host , `mac80211_hwsim` and network namespaces are required |
 
 When opening an issue, please include your OS, Python and mininet-wifi versions, the WifiForge commit, your install method, relevant logs (e.g. a lab's failure output), and steps to reproduce.
 
 </details>
-
----
-
-## Development
-
-```bash
-pip install -e '.[dev]'
-pytest          # unit tests — run headlessly, no root or mininet needed
-ruff check .    # lint
-mypy src        # type-check
-```
-
-The menu renders as a pure function of state and terminal size, and the labs import mininet lazily, so the whole test suite runs on any machine without root or mininet-wifi.
-
----
-
-## Contributing
-
-Contributions are welcome — a new lab can be as small as a single Python file.
-
-1. Fork the repository.
-2. Create a feature branch.
-3. Make your changes.
-4. Test them in an isolated environment.
-5. Open a pull request.
-
-For larger changes, opening an issue first helps coordinate development.
 
 ---
 
