@@ -25,7 +25,7 @@
 <a href="#installation"><b>Installation</b></a> &nbsp;·&nbsp;
 <a href="#usage"><b>Usage</b></a> &nbsp;·&nbsp;
 <a href="#writing-labs"><b>Writing Labs</b></a> &nbsp;·&nbsp;
-<a href="#labs"><b>Labs</b></a> &nbsp;·&nbsp;
+<a href="https://wififorge.github.io/"><b>Labs | Walkthroughs</b></a> &nbsp;·&nbsp;
 <a href="#safety"><b>Safety</b></a>
 
 </div>
@@ -46,6 +46,13 @@ The radios are [mininet-wifi](https://github.com/intrig-unicamp/mininet-wifi) vi
 <div align="center">
   <img width="85%" src="images/wf-running.png" alt="WifiForge running a lab" />
 </div>
+
+---
+## Walkthroughs
+
+Full walkthrough instructions are in the docs:
+
+### ➜ [wififorge.github.io/](https://wififorge.github.io/)
 
 ---
 
@@ -116,27 +123,6 @@ def run():
 ```
 
 Drop the file in `src/wififorge/labs/`, or point WifiForge at your own directory with `--labs-dir DIR`. A lab that fails to import won't crash the menu — it just shows as disabled.
-
-<div align="right"><a href="#top"><sub>▲ back to top</sub></a></div>
-
----
-
-## Labs
-
-| Lab | Category | Difficulty |
-| :-- | :-- | :-- |
-| Airsuite Recon & Key Discovery | Recon | ●●○ Intermediate |
-| Bettercap Recon | Recon | ●○○ Beginner |
-| Bettercap Auth Capture | Capture | ●●○ Intermediate |
-| NTLM John Crack | Cracking | ●○○ Beginner |
-| Cracking WPA with Aircrack | Cracking | ●●○ Intermediate |
-| Capture to HCCAPX / Hashcat | Cracking | ●●● Advanced |
-| Airgeddon DoS | Attack | ●○○ Beginner |
-| WEP Attack | Attack | ●○○ Beginner |
-| Evil Twin | Attack | ●●○ Intermediate |
-| WPS Pixie Dust | Attack | ●●● Advanced |
-| Wifiphisher | Phishing | ●●○ Intermediate |
-| Drone Hacking | Misc | ●●● Advanced |
 
 <div align="right"><a href="#top"><sub>▲ back to top</sub></a></div>
 
