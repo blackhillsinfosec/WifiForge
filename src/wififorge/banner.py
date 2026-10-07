@@ -16,27 +16,7 @@ if TYPE_CHECKING:
     from .theme import Theme
 
 # A small signal-strength flourish shown above the wordmark.
-_WAVE = """
-                                  ██████████                                  
-                             ████████████████████                             
-                          ██████████████████████████                          
-                       ████████████████████████████████                       
-                     ███████████████████████████████████                      
-                    █████████████████████████████████████                     
-                    00 ███████                 ███████ 00                     
-                    11 0 ██    ███████████████    ██ 0 11                     
-                    00 1  0 █████████████████████ 0  1 00                     
-                    11 0  1 █████████████████████ 1  0 11                     
-                    00 1  0 0 ██████     ██████ 0 0  1 00                     
-             11 0      1 0 1  \u001b[31m███\u001b[0m  1 0 1      0 11      
-                1      0 1 0 \u001b[31m█████\u001b[0m 0 1 0      1         
-                0      1 0   \u001b[31m1███1\u001b[0m   0 1      0         
-                       1   \u001b[31m0 1 0\u001b[0m   1                
-                            \u001b[31m1 0 1\u001b[0m                    
-                            \u001b[31m0 1 0\u001b[0m                    
-                            \u001b[31m1 0 1\u001b[0m                    
-                                \u001b[31m1\u001b[0m                        
-"""
+_WAVE = "▁ ▃ ▅ ▇ █ ▇ ▅ ▃ ▁"
 
 # Clean "WifiForge" wordmark (figlet "ANSI Shadow"). Block glyphs are drawn in the
 # accent colour and the shadow glyphs dimmed, at render time.
