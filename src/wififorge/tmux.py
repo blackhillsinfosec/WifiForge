@@ -89,7 +89,11 @@ def config_tmux(nodes: Sequence[str], lab_name: str) -> None:
         session.cmd("set", "-g", "pane-border-status", "top")
         session.cmd("set", "-g", "mouse", "on")
         session.cmd("select-layout", "tiled")
-        session.attach()
+        # Attach with the tmux CLI rather than ``session.attach()``: libtmux
+        # refreshes the session after attach returns, which raises
+        # "no server running" once the learner has exited every pane (tmux
+        # shuts its server down when the last session ends).
+        subprocess.run(["tmux", "attach-session", "-t", session_name], check=False)
     finally:
         subprocess.run(
             ["tmux", "kill-session", "-t", session_name],
