@@ -1,9 +1,10 @@
 """Process/environment concerns that sit outside the UI and the labs themselves.
 
-Covers three things the original scattered across ``WifiForge.py``:
+Covers four things the original scattered across ``WifiForge.py``:
 
 * capping ``RLIMIT_NOFILE`` so mininet-wifi starts quickly on high-ulimit distros,
 * checking we are root (labs create network namespaces and interfaces),
+* starting the Open vSwitch service mininet-wifi's access points depend on,
 * tearing down mininet state between labs.
 
 The teardown no longer pokes at mininet-wifi's private class attributes; it shells
@@ -43,6 +44,42 @@ def is_root() -> bool:
 
 def mininet_available() -> bool:
     return shutil.which("mn") is not None
+
+
+OVS_SERVICE = "openvswitch-switch"
+
+
+def start_openvswitch(service: str = OVS_SERVICE) -> str | None:
+    """Start the Open vSwitch service (``service openvswitch-switch start``).
+
+    mininet-wifi builds its access points on OVS bridges, so labs fail with
+    "ovs-vsctl: unix:/var/run/openvswitch/db.sock: database connection failed"
+    if the service isn't running. Starting an already-running service is a
+    no-op, so this is safe to call on every launch.
+
+    Returns ``None`` on success, or a short error message on failure. Falls back
+    to ``systemctl`` on systems without the ``service`` wrapper.
+    """
+    if shutil.which("service"):
+        cmd = ["service", service, "start"]
+    elif shutil.which("systemctl"):
+        cmd = ["systemctl", "start", service]
+    else:
+        return "neither 'service' nor 'systemctl' was found"
+    try:
+        result = subprocess.run(
+            cmd,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.PIPE,
+            text=True,
+            check=False,
+            timeout=30,
+        )
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        return str(exc)
+    if result.returncode != 0:
+        return (result.stderr or "").strip() or f"exit status {result.returncode}"
+    return None
 
 
 def clean_mininet_state() -> None:

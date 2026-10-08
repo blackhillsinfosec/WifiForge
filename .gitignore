@@ -1,7 +1,2 @@
-__pycache__
-first_install_check
-.env
-mac80211_hwsim_mgmt
-openflow
-wmediumd
-*apconf
+# Created by venv; see https://docs.python.org/3/library/venv.html
+*

@@ -16,7 +16,14 @@ from blessed import Terminal
 
 from . import __version__
 from .labs.loader import Lab, discover, labs_dir_from_env
-from .runtime import cap_open_file_limit, clean_mininet_state, is_root, mininet_available
+from .runtime import (
+    OVS_SERVICE,
+    cap_open_file_limit,
+    clean_mininet_state,
+    is_root,
+    mininet_available,
+    start_openvswitch,
+)
 from .tui import Menu
 
 
@@ -98,6 +105,14 @@ def main(argv: Sequence[str] | None = None) -> int:
     if not mininet_available():
         print("Warning: 'mn' (mininet) was not found on PATH — labs will not run.")
         print("Install system dependencies first (see ./install-system-deps.sh).\n")
+
+    # mininet-wifi needs Open vSwitch running; start it once up front. Skipped
+    # when browsing as non-root, since starting a service requires root anyway.
+    if is_root():
+        error = start_openvswitch()
+        if error:
+            print(f"Warning: could not start {OVS_SERVICE} ({error}) — labs may fail to build.")
+            print(f"Try: sudo service {OVS_SERVICE} start\n")
 
     term = Terminal()
     menu = Menu(term=term, labs=labs)
