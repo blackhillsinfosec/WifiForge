@@ -2,7 +2,7 @@
 <div align="center">
 
 <a href="https://github.com/blackhillsinfosec/WifiForge">
-  <img width="60%" src="images/logo-wf.jpg" alt="WifiForge" />
+  <img width="60%" src="images/wififorge-polished-logo.png" alt="WifiForge" />
 </a>
 
 ### A complete WiFi hacking lab — virtual, sandboxed, no radio required.
@@ -34,7 +34,7 @@
 
 ## Overview
 
-**WifiForge** is a terminal-driven framework for building **fully virtual** WiFi networks for security research and training. It's a safe, legal, sandboxed place to practice real wireless attacks, recon, handshake capture, cracking, evil twins, WPS, and more — without any hardware.
+**WifiForge** is a terminal-driven framework for building **fully virtual** WiFi networks for security research and training. It's a safe, legal, sandboxed place to practice real wireless attacks, recon, handshake capture, cracking, evil twins, WPS, and more, without any hardware.
 
 The radios are [mininet-wifi](https://github.com/intrig-unicamp/mininet-wifi) virtual interfaces (`mac80211_hwsim`), so an entire airspace, access points, client stations, and your attacker runs in software with nothing sent over the air. Pick a lab from the menu, and WifiForge builds the network, drops you into a per-node terminal, and lets you run the attack hands-on. When you leave, it tears everything down and cleans up.
 
@@ -87,7 +87,7 @@ sudo wififorge
 | <kbd>/</kbd> | Search (<kbd>Esc</kbd> clears) |
 | <kbd>q</kbd> / <kbd>Esc</kbd> | Quit |
 
-Launching a lab needs root. You can browse without it — `wififorge --list` prints every lab, and `wififorge --allow-non-root` opens the menu for a look around.
+Launching a lab needs root. You can browse without it, `wififorge --list` prints every lab, and `wififorge --allow-non-root` opens the menu for a look around.
 
 <div align="right"><a href="#top"><sub>▲ back to top</sub></a></div>
 
