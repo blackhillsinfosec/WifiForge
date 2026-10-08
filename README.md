@@ -5,7 +5,7 @@
   <img width="60%" src="images/wififorge-polished-logo.png" alt="WifiForge" />
 </a>
 
-### A complete WiFi hacking lab — virtual, sandboxed, no radio required.
+### A complete WiFi hacking sandbox - virtual, sandboxed, no radio required.
 
 <samp>mininet-wifi virtual networks in software · spin up a wireless-attack lab from one menu</samp>
 
@@ -22,7 +22,7 @@
 <br>
 
 <a href="#overview"><b>Overview</b></a> &nbsp;·&nbsp;
-<a href="#installation"><b>Installation</b></a> &nbsp;·&nbsp;
+<a href="https://wififorge.github.io/Installation"><b>Installation</b></a> &nbsp;·&nbsp;
 <a href="#usage"><b>Usage</b></a> &nbsp;·&nbsp;
 <a href="#writing-labs"><b>Writing Labs</b></a> &nbsp;·&nbsp;
 <a href="https://wififorge.github.io/"><b>Labs | Walkthroughs</b></a> &nbsp;·&nbsp;
@@ -53,22 +53,6 @@ The radios are [mininet-wifi](https://github.com/intrig-unicamp/mininet-wifi) vi
 Full walkthrough instructions are in the docs:
 
 ### ➜ [wififorge.github.io/](https://wififorge.github.io/)
-
----
-
-## Installation
-
-Full installation instructions are in the docs:
-
-### ➜ [wififorge.github.io/Installation](https://wififorge.github.io/Installation)
-
-WifiForge runs on **Kali Linux** and labs are launched as root. Once installed, start the menu with:
-
-```bash
-sudo wififorge
-```
-
-<div align="right"><a href="#top"><sub>▲ back to top</sub></a></div>
 
 ---
 
