@@ -44,7 +44,7 @@ The radios are [mininet-wifi](https://github.com/intrig-unicamp/mininet-wifi) vi
 <br>
 
 <div align="center">
-  <img width="85%" src="images/wf-running.png" alt="WifiForge running a lab" />
+  <img width="85%" src="images/wf-forge-menu.png" alt="WifiForge running a lab" />
 </div>
 
 ---
