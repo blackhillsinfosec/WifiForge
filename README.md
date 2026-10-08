@@ -34,9 +34,9 @@
 
 ## Overview
 
-**WifiForge** is a terminal-driven framework for building **fully virtual** WiFi networks for security research and training. It's a safe, legal, sandboxed place to practice real wireless attacks — recon, handshake capture, cracking, evil twins, WPS, and more — without any hardware.
+**WifiForge** is a terminal-driven framework for building **fully virtual** WiFi networks for security research and training. It's a safe, legal, sandboxed place to practice real wireless attacks, recon, handshake capture, cracking, evil twins, WPS, and more — without any hardware.
 
-The radios are [mininet-wifi](https://github.com/intrig-unicamp/mininet-wifi) virtual interfaces (`mac80211_hwsim`), so an entire airspace — access points, client stations, and your attacker — runs in software with nothing sent over the air. Pick a lab from the menu, and WifiForge builds the network, drops you into a per-node terminal, and lets you run the attack hands-on. When you leave, it tears everything down and cleans up.
+The radios are [mininet-wifi](https://github.com/intrig-unicamp/mininet-wifi) virtual interfaces (`mac80211_hwsim`), so an entire airspace, access points, client stations, and your attacker runs in software with nothing sent over the air. Pick a lab from the menu, and WifiForge builds the network, drops you into a per-node terminal, and lets you run the attack hands-on. When you leave, it tears everything down and cleans up.
 
 > [!NOTE]
 > WifiForge creates only virtual networks confined to your machine. Use it only in environments you own or are explicitly authorized to test.
