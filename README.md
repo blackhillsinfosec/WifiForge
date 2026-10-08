@@ -1,56 +1,139 @@
+<a name="top"></a>
 <div align="center">
-<a href="https://blackhillsinfosec.com"><img width="100%" src="https://github.com/her3ticAVI/MiniNet-framework/blob/main/images/WifiForgeVersion2.png" alt="Wifi Forge Logo" /></a>
-<hr>
 
-  <a href="https://github.com/blackhillsinfosec/WifiForge/actions"><img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/blackhillsinfosec/WifiForge/.github%2Fworkflows%2Fpython-app.yml?style=flat-square"></a> 
-  &nbsp;
-  <a href="https://discord.com/invite/bhis"><img alt="Discord" src="https://img.shields.io/discord/967097582721572934?label=Discord&color=7289da&style=flat-square" /></a>
-  &nbsp;
-  <a href="https://github.com/blackhillsinfosec/WifiForge/graphs/contributors"><img alt="npm" src="https://img.shields.io/github/contributors-anon/blackhillsinfosec/WifiForge?color=yellow&style=flat-square" /></a>
-  &nbsp;
-  <a href="https://x.com/BHinfoSecurity"><img src="https://img.shields.io/badge/follow-BHIS-1DA1F2?logo=twitter&style=flat-square" alt="BHIS Twitter" /></a>
-  &nbsp;
-  <a href="https://x.com/BHinfoSecurity"><img src="https://img.shields.io/github/stars/blackhillsinfosec/WifiForge?style=flat-square&color=rgb(255%2C218%2C185)" alt="Wifi Forge Stars" /></a>
+<a href="https://github.com/blackhillsinfosec/WifiForge">
+  <img width="60%" src="images/wififorge-polished-logo.png" alt="WifiForge" />
+</a>
 
-<!-- TRemove Later -->
+### A complete WiFi hacking sandbox - virtual, sandboxed, no radio required.
 
-# ⚠️ New Release - SDRForge ⚠️
-Shamless plug. Please go check out the next Forge tool we've just released!
-<div align="center">
-<a href="https://github.com/blackhillsinfosec/SDRForge"><img width="100%" src="https://github.com/blackhillsinfosec/WifiForge/blob/main/images/SDRForge-Ad.jpg" alt="SDR Forge Release Ad" /></a>
-<hr>
-  
-<!-- Remove Later -->
+<samp>mininet-wifi virtual networks in software · spin up a wireless-attack lab from one menu</samp>
 
-<p class="align center">
-<h4><code>WifiForge</code> provides a safe and legal environment for learning WiFi hacking. Based on the open source mininet-wifi, this project automatically sets up the networks and tools needed to run a variety of WiFi exploitation labs, removing the need for the overhead and hardware normally required to perform these attacks.</h4>
-</p>
+<br>
+<br>
 
-<div style="text-align: center;">
-  <h4>
-    <a target="_blank" href="https://wififorge.github.io/" rel="dofollow"><strong>Explore the Docs</strong></a>&nbsp;·&nbsp;
-    <a target="_blank" href="https://discord.com/invite/bhis" rel="dofollow"><strong>Community Help</strong></a>&nbsp;·&nbsp;
-    <a target="_blank" href="https://www.youtube.com/watch?v=lqvq3xH0qYM&t=8s" rel="dofollow"><strong>What is Wifi Forge?</strong></a>&nbsp;·&nbsp;
-    <a target="_blank" href="https://www.blackhillsinfosec.com/wififorge/" rel="dofollow"><strong>Blog Post</strong></a>
-  </h4>
+<img src="https://img.shields.io/badge/license-Apache_2.0-D22128?style=for-the-badge" alt="License" />
+<img src="https://img.shields.io/badge/python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python" />
+<img src="https://img.shields.io/badge/platform-Kali_Linux-557C94?style=for-the-badge&logo=kalilinux&logoColor=white" alt="Kali Linux" />
+<a href="https://discord.com/invite/bhis"><img src="https://img.shields.io/discord/967097582721572934?style=for-the-badge&logo=discord&logoColor=white&label=discord&color=5865F2" alt="Discord" /></a>
+
+<br>
+<br>
+
+<a href="#overview"><b>Overview</b></a> &nbsp;·&nbsp;
+<a href="https://wififorge.github.io/Installation"><b>Installation</b></a> &nbsp;·&nbsp;
+<a href="#usage"><b>Usage</b></a> &nbsp;·&nbsp;
+<a href="#writing-labs"><b>Writing Labs</b></a> &nbsp;·&nbsp;
+<a href="https://wififorge.github.io/"><b>Labs | Walkthroughs</b></a> &nbsp;·&nbsp;
+<a href="#safety"><b>Safety</b></a>
+
 </div>
-<hr>
-<a href="https://blackhillsinfosec.com"><img width="75%" height="75%" src="https://github.com/her3ticAVI/MiniNet-framework/blob/main/images/wififorge-running.png" alt="Wifi Forge Running" /></a>
-<div align="left">
 
-## Navigation
+---
 
-> Note: `WifiForge` is still in its infancy constantly changing and growing, with growth comes issues and pain. This product is not promised to be stable, and should not be used outside of a virtual machine at this time.
+## Overview
 
-- [Installation Documentation](https://wififorge.github.io/Installation)
-- [Walkthroughs](https://wififorge.github.io/Lab-Walkthroughs/)
-- [Troubleshooting](https://wififorge.github.io/Troubleshooting)
-- [Overview](https://wififorge.github.io/Overview)
-- [Contributing](https://wififorge.github.io/Development)
+**WifiForge** is a terminal-driven framework for building **fully virtual** WiFi networks for security research and training. It's a safe, legal, sandboxed place to practice real wireless attacks, recon, handshake capture, cracking, evil twins, WPS, and more, without any hardware.
 
-## References
-- https://mininet-wifi.github.io/
+The radios are [mininet-wifi](https://github.com/intrig-unicamp/mininet-wifi) virtual interfaces (`mac80211_hwsim`), so an entire airspace, access points, client stations, and your attacker runs in software with nothing sent over the air. Pick a lab from the menu, and WifiForge builds the network, drops you into a per-node terminal, and lets you run the attack hands-on. When you leave, it tears everything down and cleans up.
+
+> [!NOTE]
+> WifiForge creates only virtual networks confined to your machine. Use it only in environments you own or are explicitly authorized to test.
+
+<br>
+
+<div align="center">
+  <img width="85%" src="images/wf-forge-menu.png" alt="WifiForge running a lab" />
+</div>
+
+---
+## Walkthroughs
+
+Full walkthrough instructions are in the docs:
+
+### ➜ [wififorge.github.io/](https://wififorge.github.io/)
+
+---
+
+## Usage
+
+Launch the menu and pick a lab:
+
+```bash
+sudo wififorge
+```
+
+| Key | Action |
+| :-- | :-- |
+| <kbd>↑</kbd> <kbd>↓</kbd> / <kbd>j</kbd> <kbd>k</kbd> | Move selection |
+| <kbd>Enter</kbd> | Launch the selected lab |
+| <kbd>/</kbd> | Search (<kbd>Esc</kbd> clears) |
+| <kbd>q</kbd> / <kbd>Esc</kbd> | Quit |
+
+Launching a lab needs root. You can browse without it, `wififorge --list` prints every lab, and `wififorge --allow-non-root` opens the menu for a look around.
+
+<div align="right"><a href="#top"><sub>▲ back to top</sub></a></div>
+
+---
+
+## Writing Labs
+
+A lab is a small Python module, discovered automatically. Declare its metadata and a `run()` entry point; the shared harness handles the build → tmux → teardown lifecycle.
+
+```python
+from wififorge.labs._schema import LabMeta, Category, Difficulty
+from wififorge.labs._harness import run_lab
+
+LAB = LabMeta(
+    title="My Lab",
+    category=Category.ATTACK,
+    difficulty=Difficulty.INTERMEDIATE,
+    tools=("aircrack-ng",),
+    summary="One or two sentences describing what the learner will do.",
+)
+
+def _topology(net):
+    net.addStation("Attacker", wlans=1)
+    host1 = net.addStation("host1", passwd="password123", encrypt="wpa2")
+    ap1 = net.addAccessPoint("ap1", ssid="MyNet", passwd="password123",
+                             encrypt="wpa2", mode="g", channel="1")
+    net.configureWifiNodes()
+    net.addLink(host1, ap1)
+    return [ap1]
+
+def run():
+    run_lab("MY_LAB", ["Attacker", "host1"], _topology)
+```
+
+Drop the file in `src/wififorge/labs/`, or point WifiForge at your own directory with `--labs-dir DIR`. A lab that fails to import won't crash the menu — it just shows as disabled.
+
+<div align="right"><a href="#top"><sub>▲ back to top</sub></a></div>
+
+---
+
+## Safety
+
+> [!WARNING]
+> **WifiForge is for authorized security research and education only.** Use the techniques you learn here only on networks, devices, and clients you own or are explicitly authorized to test.
+
+> [!NOTE]
+> **WifiForge does not transmit RF.** The entire radio path is mininet-wifi's `mac80211_hwsim` virtual interfaces running on your machine, so nothing is sent over the air.
+
+---
 
 <div align="center">
 
-Made with ❤️ by Black Hills Infosec
+[**WifiForge**](https://github.com/blackhillsinfosec/WifiForge) &nbsp;·&nbsp;
+[**Docs**](https://wififorge.github.io/) &nbsp;·&nbsp;
+[**mininet-wifi**](https://github.com/intrig-unicamp/mininet-wifi) &nbsp;·&nbsp;
+[**Black Hills InfoSec**](https://www.blackhillsinfosec.com/)
+
+<br>
+
+<sub>Made with ❤️ by <b>Black Hills Information Security</b> · Licensed under Apache 2.0</sub>
+
+<br>
+
+<a href="#top"><sub>▲ back to top</sub></a>
+
+</div>

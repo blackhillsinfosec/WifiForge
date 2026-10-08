@@ -1,8 +1,0 @@
-libtmux==0.45.0
-types-keyboard==0.13
-types-tqdm==4.66
-blessed
-halo
-plotext
-#itertools
-pwntools
