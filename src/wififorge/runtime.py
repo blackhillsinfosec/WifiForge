@@ -7,9 +7,11 @@ Covers four things the original scattered across ``WifiForge.py``:
 * starting the Open vSwitch service mininet-wifi's access points depend on,
 * tearing down mininet state between labs.
 
-The teardown no longer pokes at mininet-wifi's private class attributes; it shells
-out to ``mn -c`` (the supported cleanup path) and is a no-op-safe if mininet isn't
-installed, so the menu still runs for browsing on non-lab machines.
+The teardown shells out to ``mn -c`` and also resets the few class-level lists
+mininet-wifi keeps between networks (radio IDs, mobility APs). Those survive in the
+Python process, so without the reset the *second* lab launched from the same menu
+session inherits stale radio IDs and fails to build. Everything is no-op-safe when
+mininet isn't installed, so the menu still runs for browsing on non-lab machines.
 """
 
 from __future__ import annotations
@@ -82,11 +84,24 @@ def start_openvswitch(service: str = OVS_SERVICE) -> str | None:
     return None
 
 
+def _reset_mininet_wifi_class_state() -> None:
+    """Clear mininet-wifi's per-process radio bookkeeping (as the original did)."""
+    try:
+        from mn_wifi.mobility import ConfigMobLinks, Mobility
+        from mn_wifi.module import Mac80211Hwsim
+    except Exception:  # noqa: BLE001 - mininet-wifi absent or API changed
+        return
+    for cls, attr in ((Mobility, "aps"), (ConfigMobLinks, "aps"), (Mac80211Hwsim, "hwsim_ids")):
+        if hasattr(cls, attr):
+            setattr(cls, attr, [])
+
+
 def clean_mininet_state() -> None:
     """Best-effort teardown of leftover mininet nodes/links between labs.
 
     Safe to call when mininet is absent (e.g. browsing the menu on a laptop).
     """
+    _reset_mininet_wifi_class_state()
     if not mininet_available():
         return
     subprocess.run(

@@ -11,7 +11,7 @@ from __future__ import annotations
 from typing import Any
 
 
-def standard_range(net: Any) -> list:
+def standard_range(net: Any, attacker_wlans: int = 1) -> list:
     """Build WifiForge's standard multi-network practice range on ``net``.
 
     Networks created (all co-existing, as a messy real airspace would be):
@@ -22,10 +22,10 @@ def standard_range(net: Any) -> list:
     * ``FBI_Van``          — WPA2 decoy, one client
     * ``cantseeme``        — hidden-SSID WPA2, one client
 
-    Plus a single-radio ``Attacker`` station. Returns the AP list so the caller
-    can ``build()`` then start each one.
+    Plus an ``Attacker`` station with ``attacker_wlans`` radios (one by default).
+    Returns the AP list so the caller can ``build()`` then start each one.
     """
-    net.addStation("Attacker", wlans=1)
+    net.addStation("Attacker", wlans=attacker_wlans)
 
     # --- Legacy WEP network ---------------------------------------------------
     host1 = net.addStation("host1", passwd="123456789a", encrypt="wep")

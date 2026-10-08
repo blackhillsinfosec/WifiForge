@@ -28,11 +28,14 @@ dependencies = [
     "blessed>=1.20",
     "halo>=0.0.31",
     "libtmux>=0.37",
+    # Used by the bundled lab helper scripts in labs/materials/:
+    "tqdm",        # eaphammer (Evil Twin)
+    "plotext>=5.2",  # graph-drones.py (Drone Hacking)
+    "pwntools",    # control-drones.py (Drone Hacking)
 ]
 
 [project.optional-dependencies]
 # Labs that use these tools pull them in explicitly; keep the base install lean.
-plot = ["plotext>=5.2"]
 dev = [
     "pytest>=8.0",
     "ruff>=0.5",
@@ -49,6 +52,8 @@ Issues = "https://github.com/blackhillsinfosec/WifiForge/issues"
 [project.scripts]
 wififorge = "wififorge.cli:main"
 wf = "wififorge.cli:main"
+# Typed inside a lab's terminal panes to end the lab and return to the menu.
+main_menu = "wififorge.tmux:main_menu"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/wififorge"]

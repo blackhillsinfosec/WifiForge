@@ -44,6 +44,43 @@ def _node_pid(node: str) -> str | None:
     return None
 
 
+SESSION_PREFIX = "WIFIFORGE-"
+
+
+def kill_lab_sessions() -> int:
+    """Kill every WifiForge lab tmux session, returning the learner to the menu.
+
+    This backs the ``main_menu`` command the walkthroughs tell learners to type.
+    Returns the number of sessions killed.
+    """
+    try:
+        out = subprocess.check_output(
+            ["tmux", "list-sessions", "-F", "#{session_name}"],
+            text=True,
+            stderr=subprocess.DEVNULL,
+        )
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return 0
+    killed = 0
+    for name in out.splitlines():
+        if name.startswith(SESSION_PREFIX):
+            subprocess.run(
+                ["tmux", "kill-session", "-t", name],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                check=False,
+            )
+            killed += 1
+    return killed
+
+
+def main_menu() -> int:
+    """Entry point for the ``main_menu`` command."""
+    if kill_lab_sessions() == 0:
+        print("No WifiForge lab is running.")
+    return 0
+
+
 def config_tmux(nodes: Sequence[str], lab_name: str) -> None:
     """Open an attached tmux session with a titled pane per node in ``nodes``.
 
@@ -54,7 +91,7 @@ def config_tmux(nodes: Sequence[str], lab_name: str) -> None:
         raise RuntimeError("libtmux is not installed; run the system-deps installer")
 
     server = libtmux.Server()
-    session_name = f"WIFIFORGE-{lab_name}"
+    session_name = f"{SESSION_PREFIX}{lab_name}"
     session = server.new_session(session_name=session_name, attach=False)
     try:
         window = session.windows[0]

@@ -7,8 +7,8 @@ turned into colour at render time. That way the art adapts to the terminal's
 real colour support and the column math is never thrown off by invisible
 escape bytes.
 
-Note: the full logo is 27 rows tall, so on an 80x24 terminal it won't fit
-alongside the menu.
+The full logo is 27 rows tall. On terminals too short for it, the menu falls
+back to the compact form (just the wordmark and credit) or hides the banner.
 """
 
 from __future__ import annotations
@@ -85,8 +85,8 @@ def _parse(src: list[str]) -> tuple[list[str], list[list[tuple[int, int]]]]:
         lines.append("".join(plain).rstrip())
         spans.append(row_spans)
 
-    indent = min((len(l) - len(l.lstrip()) for l in lines if l.strip()), default=0)
-    lines = [l[indent:] for l in lines]
+    indent = min((len(ln) - len(ln.lstrip()) for ln in lines if ln.strip()), default=0)
+    lines = [ln[indent:] for ln in lines]
     spans = [[(a - indent, b - indent) for a, b in row] for row in spans]
     return lines, spans
 
@@ -94,30 +94,40 @@ def _parse(src: list[str]) -> tuple[list[str], list[list[tuple[int, int]]]]:
 _LINES, _SPANS = _parse(_SOURCE)
 
 
-def banner_lines() -> list[str]:
-    """Return the full banner as plain (uncoloured) lines."""
-    return list(_LINES)
+# Row indices (into _LINES) for the compact form: wordmark + credit only.
+_COMPACT_ROWS = [*_WORDMARK_ROWS, len(_LINES) - 1]
 
 
-def banner_height() -> int:
-    return len(_LINES)
+def _rows(compact: bool) -> list[int]:
+    return _COMPACT_ROWS if compact else list(range(len(_LINES)))
 
 
-def banner_width() -> int:
-    return max(len(line) for line in _LINES)
+def banner_lines(compact: bool = False) -> list[str]:
+    """Return the banner as plain (uncoloured) lines."""
+    return [_LINES[i] for i in _rows(compact)]
 
 
-def render_banner(term: Terminal, theme: Theme, top: int = 0) -> list[str]:
+def banner_height(compact: bool = False) -> int:
+    return len(_rows(compact))
+
+
+def banner_width(compact: bool = False) -> int:
+    return max(len(line) for line in banner_lines(compact))
+
+
+def render_banner(
+    term: Terminal, theme: Theme, top: int = 0, compact: bool = False
+) -> list[str]:
     """Produce absolute-positioned, coloured banner rows centred in the terminal.
 
     The logo is centred as a single block (not line by line) so the router art
     keeps its shape.
     """
     width = term.width or 80
-    col = max((width - banner_width()) // 2, 0)
+    col = max((width - banner_width(compact)) // 2, 0)
     return [
-        term.move_xy(col, top + i) + _colour_line(term, theme, i, line)
-        for i, line in enumerate(_LINES)
+        term.move_xy(col, top + row) + _colour_line(term, theme, i, _LINES[i])
+        for row, i in enumerate(_rows(compact))
     ]
 
 

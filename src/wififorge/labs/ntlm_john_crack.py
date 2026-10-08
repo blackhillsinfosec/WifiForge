@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 from ._harness import run_lab
+from .materials import path as material
 from ._schema import Category, Difficulty, LabMeta
 
 LAB = LabMeta(
@@ -35,3 +36,5 @@ def _topology(net: Any) -> list:
 
 def run() -> None:
     run_lab("NTLM_JOHN_CRACK", ["Attacker"], _topology)
+    # John won't re-crack a hash already in its potfile; reset for next time.
+    material("loot", "output.pot").unlink(missing_ok=True)

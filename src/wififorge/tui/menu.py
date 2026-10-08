@@ -77,7 +77,13 @@ class Menu:
         width = width if width is not None else (term.width or 80)
         height = height if height is not None else (term.height or 24)
 
+        # Prefer the full logo, then the compact wordmark, then no banner.
+        compact = False
         layout = geometry.compute(width, height, banner_height())
+        if not layout.show_banner:
+            small = geometry.compute(width, height, banner_height(compact=True))
+            if small.show_banner:
+                layout, compact = small, True
         parts: list[str] = [term.home + term.clear]
 
         if layout.too_small:
@@ -86,7 +92,7 @@ class Menu:
             return "".join(parts)
 
         if layout.show_banner:
-            parts.extend(render_banner(term, theme, top=layout.banner_top))
+            parts.extend(render_banner(term, theme, top=layout.banner_top, compact=compact))
 
         labs = self.visible_labs()
         self._clamp_selection()

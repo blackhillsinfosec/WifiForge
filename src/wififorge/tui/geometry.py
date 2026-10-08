@@ -15,7 +15,9 @@ MIN_HEIGHT = 10
 
 # Thresholds at which we drop features to fit.
 BANNER_MIN_HEIGHT = 22
-BANNER_MIN_WIDTH = 68
+BANNER_MIN_WIDTH = 72
+# Rows the lab list must keep below the banner; otherwise the banner is dropped.
+MIN_LIST_ROWS = 12
 TWO_COLUMN_MIN_WIDTH = 72
 
 
@@ -68,7 +70,10 @@ def compute(width: int, height: int, banner_height: int) -> Layout:
 
     # Hide the banner when it wouldn't fit cleanly (too short or too narrow),
     # giving the lab list the reclaimed rows instead.
-    show_banner = height >= BANNER_MIN_HEIGHT and width >= BANNER_MIN_WIDTH
+    show_banner = (
+        width >= BANNER_MIN_WIDTH
+        and height >= max(BANNER_MIN_HEIGHT, banner_height + MIN_LIST_ROWS + 2)
+    )
     top = (banner_height + 1) if show_banner else 1
 
     footer_y = height - 1
