@@ -1,9 +1,14 @@
 """ASCII banner rendering.
 
-The logo is stored cleanly (no literal escape sequences like the original) and
-coloured at render time through the active :class:`~wififorge.theme.Theme`, so it
-adapts to the terminal's real colour support. The compact wordmark keeps the
-banner short enough to coexist with the menu on an ordinary 80x24 terminal.
+The original WifiForge logo (router + wordmark + "By BHIS" credit) is stored
+cleanly here: instead of literal ANSI escape sequences, the parts that used to
+be red are wrapped in ``{`` ``}`` markers, which are stripped at import time and
+turned into colour at render time. That way the art adapts to the terminal's
+real colour support and the column math is never thrown off by invisible
+escape bytes.
+
+Note: the full logo is 27 rows tall, so on an 80x24 terminal it won't fit
+alongside the menu.
 """
 
 from __future__ import annotations
@@ -15,61 +20,121 @@ if TYPE_CHECKING:
 
     from .theme import Theme
 
-# A small signal-strength flourish shown above the wordmark.
-_WAVE = "▁ ▃ ▅ ▇ █ ▇ ▅ ▃ ▁"
+_HL_OPEN, _HL_CLOSE = "{", "}"
 
-# Clean "WifiForge" wordmark (figlet "ANSI Shadow"). Block glyphs are drawn in the
-# accent colour and the shadow glyphs dimmed, at render time.
-_WORDMARK = [
-    '██╗    ██╗██╗███████╗██╗███████╗ ██████╗ ██████╗  ██████╗ ███████╗',
-    '██║    ██║██║██╔════╝██║██╔════╝██╔═══██╗██╔══██╗██╔════╝ ██╔════╝',
-    '██║ █╗ ██║██║█████╗  ██║█████╗  ██║   ██║██████╔╝██║  ███╗█████╗  ',
-    '██║███╗██║██║██╔══╝  ██║██╔══╝  ██║   ██║██╔══██╗██║   ██║██╔══╝  ',
-    '╚███╔███╔╝██║██║     ██║██║     ╚██████╔╝██║  ██║╚██████╔╝███████╗',
-    ' ╚══╝╚══╝ ╚═╝╚═╝     ╚═╝╚═╝      ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝'
+# The router / antenna. Text inside {braces} is drawn in red.
+_ROUTER = [
+    "                                  ██████████",
+    "                             ████████████████████",
+    "                          ██████████████████████████",
+    "                       ████████████████████████████████",
+    "                     ███████████████████████████████████",
+    "                    █████████████████████████████████████",
+    "                    00 ███████                 ███████ 00",
+    "                    11 0 ██    ███████████████    ██ 0 11",
+    "                    00 1  0 █████████████████████ 0  1 00",
+    "                    11 0  1 █████████████████████ 1  0 11",
+    "                    00 1  0 0 ██████     ██████ 0 0  1 00",
+    "                    11 0      1 0 1  {███}  1 0 1      0 11",
+    "                       1      0 1 0 {█████} 0 1 0      1",
+    "                       0      1 0   {1███1}   0 1      0",
+    "                                1   {0 1 0}   1",
+    "                                    {1 0 1}",
+    "                                    {0 1 0}",
+    "                                    {1 0 1}",
+    "                                      {1}",
 ]
 
-_TAGLINE = "forge wireless attacks in a safe, legal sandbox"
+# The original "WifiForge" wordmark. Solid blocks take the theme accent and the
+# drop-shadow glyphs are dimmed.
+_WORDMARK = [
+    "    ██╗       ██╗██╗███████╗██╗  ███████╗ █████╗ ██████╗  ██████╗ ███████╗",
+    "    ██║  ██╗  ██║██║██╔════╝██║  ██╔════╝██╔══██╗██╔══██╗██╔════╝ ██╔════╝",
+    "    ╚██╗████╗██╔╝██║█████╗  ██║  █████╗  ██║  ██║██████╔╝██║  ██╗ █████╗",
+    "     ████╔═████║ ██║██╔══╝  ██║  ██╔══╝  ██║  ██║██╔══██╗██║  ╚██╗██╔══╝",
+    "      ██╔╝ ╚██╔╝ ██║██║     ██║  ██║     ╚█████╔╝██║  ██║╚██████╔╝███████╗",
+    "      ╚═╝   ╚═╝  ╚═╝╚═╝     ╚═╝  ╚═╝      ╚════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝",
+]
+
+_BYLINE = "            {By BHIS}"
+
+_SOURCE = [*_ROUTER, "", *_WORDMARK, _BYLINE]
+_WORDMARK_ROWS = range(len(_ROUTER) + 1, len(_ROUTER) + 1 + len(_WORDMARK))
 
 _SHADOW_CHARS = set("╔╗╚╝═║╠╣╦╩╬")
 
 
+def _parse(src: list[str]) -> tuple[list[str], list[list[tuple[int, int]]]]:
+    """Strip highlight markers, returning plain lines plus red column spans.
+
+    The common left indent is removed so the logo can be centred as one block.
+    """
+    lines: list[str] = []
+    spans: list[list[tuple[int, int]]] = []
+    for raw in src:
+        plain: list[str] = []
+        row_spans: list[tuple[int, int]] = []
+        start = 0
+        for ch in raw:
+            if ch == _HL_OPEN:
+                start = len(plain)
+            elif ch == _HL_CLOSE:
+                row_spans.append((start, len(plain)))
+            else:
+                plain.append(ch)
+        lines.append("".join(plain).rstrip())
+        spans.append(row_spans)
+
+    indent = min((len(l) - len(l.lstrip()) for l in lines if l.strip()), default=0)
+    lines = [l[indent:] for l in lines]
+    spans = [[(a - indent, b - indent) for a, b in row] for row in spans]
+    return lines, spans
+
+
+_LINES, _SPANS = _parse(_SOURCE)
+
+
 def banner_lines() -> list[str]:
-    """Return the full banner (wave + wordmark + tagline) as plain lines."""
-    return [_WAVE, "", *_WORDMARK, "", _TAGLINE]
+    """Return the full banner as plain (uncoloured) lines."""
+    return list(_LINES)
 
 
 def banner_height() -> int:
-    return len(banner_lines())
+    return len(_LINES)
 
 
 def banner_width() -> int:
-    return max(len(line) for line in banner_lines())
+    return max(len(line) for line in _LINES)
 
 
 def render_banner(term: Terminal, theme: Theme, top: int = 0) -> list[str]:
-    """Produce absolute-positioned, coloured banner rows centred in the terminal."""
-    out: list[str] = []
+    """Produce absolute-positioned, coloured banner rows centred in the terminal.
+
+    The logo is centred as a single block (not line by line) so the router art
+    keeps its shape.
+    """
     width = term.width or 80
-    lines = banner_lines()
-    tagline_index = len(lines) - 1
-    for i, line in enumerate(lines):
-        col = max((width - len(line)) // 2, 0)
-        out.append(term.move_xy(col, top + i) + _colour_line(theme, line, i, tagline_index))
-    return out
+    col = max((width - banner_width()) // 2, 0)
+    return [
+        term.move_xy(col, top + i) + _colour_line(term, theme, i, line)
+        for i, line in enumerate(_LINES)
+    ]
 
 
-def _colour_line(theme: Theme, line: str, index: int, tagline_index: int) -> str:
-    if index == 0:  # the signal wave
-        return theme.accent(line)
-    if index == tagline_index:
-        return theme.dim(line)
-    # Wordmark: accent the solid blocks, dim the drop-shadow glyphs.
-    out = []
-    for ch in line:
-        if ch == "█":
+def _colour_line(term: Terminal, theme: Theme, index: int, line: str) -> str:
+    spans = _SPANS[index]
+    in_wordmark = index in _WORDMARK_ROWS
+    out: list[str] = []
+    for x, ch in enumerate(line):
+        if ch == " ":
+            out.append(ch)
+        elif any(a <= x < b for a, b in spans):
+            # blessed returns an empty formatter on colourless terminals,
+            # so this degrades to plain text automatically.
+            out.append(term.red(ch))
+        elif in_wordmark and ch == "█":
             out.append(theme.accent(ch))
-        elif ch in _SHADOW_CHARS:
+        elif in_wordmark and ch in _SHADOW_CHARS:
             out.append(theme.dim(ch))
         else:
             out.append(ch)
