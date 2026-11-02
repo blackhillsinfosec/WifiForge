@@ -30,7 +30,7 @@ dependencies = [
     "libtmux>=0.37",
     # Used by the bundled lab helper scripts in labs/materials/:
     "tqdm",        # eaphammer (Evil Twin)
-    "plotext>=5.2",  # graph-drones.py (Drone Hacking)
+    "plotext>=5.2,<6",  # graph-drones.py (Drone Hacking); 6.x removed the 5.x API it uses
     "pwntools",    # control-drones.py (Drone Hacking)
 ]
 

@@ -4,7 +4,13 @@ import sys
 import termios
 import tty
 
-from pwn import *
+try:
+    from pwn import *
+except ImportError:
+    sys.exit(
+        "pwntools is not installed for this python3. Install it with:\n"
+        "    sudo pip install --break-system-packages pwntools"
+    )
 
 # ansi escapes for text color
 RED     = "\033[91m"
@@ -12,6 +18,13 @@ GREEN   = "\033[92m"
 BLUE    = "\033[94m"
 RESET   = "\033[0m"
 DRONE_PATH = "/tmp/drone-info.json"
+
+def save_drones(data):
+    """Write the drone file atomically so graph-drones.py never reads half of it."""
+    tmp = DRONE_PATH + ".tmp"
+    with open(tmp, "w") as f:
+        json.dump(data, f)
+    os.replace(tmp, DRONE_PATH)
 
 def clearscreen():
     os.system("clear")
@@ -78,8 +91,7 @@ def moveongraph(drone, position, data):
             break
 
         data[drone]["position"] = position
-        with open("/tmp/drone-info.json", "w") as f:
-            json.dump(data, f)
+        save_drones(data)
 
         # check for collisions
         with open(DRONE_PATH) as f:
@@ -94,8 +106,7 @@ def moveongraph(drone, position, data):
                 # restore to original coordinates
                 position[:] = original
                 data[drone]["position"] = position
-                with open(DRONE_PATH, "w") as f:
-                    json.dump(data, f)
+                save_drones(data)
                 halt()
                 clearscreen()
                 break  # restart while loop

@@ -1,96 +1,209 @@
 #!/usr/bin/env python3
+"""Chrome/Chromium launcher with a chosen user agent, for the WifiForge labs.
+
+USAGE:  browser <OS> [windows-version] [URL]
+
+EXAMPLES:
+    browser linux
+    browser linux file:///wififorge/src/wififorge/labs/materials/hashcat.net/cap2hashcat/index.html
+    browser linux http://10.0.0.1
+    browser windows
+    browser windows 7 http://10.0.0.1
+    browser "mac os"
+
+Wrap an OS name or Windows version containing spaces in quotes.
+
+USER AGENT OPTIONS:
+    linux    - the browser's own (Linux) user agent
+    windows  - Windows user agent (Windows 10 unless a version is given)
+The following also work but are not guaranteed:
+    android, open bsd, sun os, ios, mac os x, mac os, qnx, unix, beos, os/2, bot
+
+WINDOWS VERSIONS (not all tested):
+    10, 8.1, 8, 7, vista, server 2003, xp, 2000, me, 98, 95, nt 4.0, ce, 3.11
+
+Every launch uses a fresh, throwaway browser profile. That keeps the window in
+the network namespace of the pane you launched it from (an already-running
+Chrome would otherwise swallow the request and open the page in *its* namespace)
+and avoids "profile in use" lock errors left behind by a previous lab.
+"""
+
+from __future__ import annotations
+
 import os
+import pwd
+import re
 import shutil
+import subprocess
 import sys
-#import pdb; pdb.set_trace()
+import tempfile
+from urllib.parse import unquote, urlparse
 
-help = "Chrome broswer user-agent initialization script for Wififorge\n\nUSEAGE: browser '[OS]' '[windows version]' \nEXAMPLES:\n\t./browser \"mac os\"\n\t./browser windows \"server 2003\" \nIf spaces present in OS name, wrap argument in quotes\nWindows versions must be provided as a seperate argument, within unique set of quotes if spaces present in version argument.\n \n\nUSER AGENT OPTIONS:\n\tlinux - linux user agent\n\twindows - windows user agent\nThe following can be used as arguments but are not guaranteed to work:\n\tAndroid\n\tOpen BSD\n\tSun OS\n\tiOS\n\tMac OS X\n\tMac OS\n\tQNX\n\tUNIX\n\tBeOS\n\tOS/2\n\tbot\nVERSIONS\nIf using windows, a windows version can be set as a seperate argument. If not specified, windows 10 will be used by default.\nNOTE: not all versions have been tested\n\t10 - Windows 10\n\t8.1 - Windows 8.1\n\t8 - Windows 8\n\t7 - Windows 7\n\tVista - Windows Vista\n\tServer 2003 - Windows Server 2003\n\tXP - Windows XP\n\t2000 - Windows 2000\n\tME - Windows ME\n\t98 - Windows 98\n\t95 - Windows 95\n\t4.0 - Windows NT 4.0\n\tCE - Windows CE\n\t3.11 - Windows 3.11\n"
-version = "10"
-user_agent = ""
-windows_version = ""
-user_agent_arg = "--user-agent="
+CHROME_CANDIDATES = ("google-chrome", "google-chrome-stable", "chromium", "chromium-browser")
 
-# Use whichever Chrome-family browser is installed.
-CHROME = next(
-	(b for b in ("google-chrome", "google-chrome-stable", "chromium", "chromium-browser") if shutil.which(b)),
-	None,
-)
-if CHROME is None:
-	print("No Chrome or Chromium browser found. Install one with: apt install chromium")
-	sys.exit(1)
+_WIN_UA = "Mozilla/5.0 ({nt}; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36"
+
+# None means "keep the browser's own user agent".
+USER_AGENTS: dict[str, str | None] = {
+    "linux": None,
+    "windows": _WIN_UA.format(nt="Windows NT 10.0"),
+    "android": "Mozilla/5.0 (Linux; U; Android 4.0.2; en-us; Galaxy Nexus Build/ICL53F) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30",
+    "open bsd": "Mozilla/5.0 (X11; U; OpenBSD arm; en-us) AppleWebKit/531.2 (KHTML, like Gecko) Safari/531.2 Epiphany/2.30.0",
+    "sun os": "Mozilla/5.0 (compatible; Konqueror/3.3; SunOS) (KHTML, like Gecko)",
+    "ios": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/125.0.0.0 Mobile/15E148 Safari/604.1",
+    "mac os x": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/125.0.0.0 Mobile/15E148 Safari/604.1",
+    "mac os": "Mozilla/5.0 (Macintosh; JAT-LX1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
+    "qnx": "Mozilla/5.0 (QNX Neutrino 6.5.0; armle) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2182.0 Safari/537.36",
+    "unix": "Mozilla/5.0 (Unix) AppleWebKit/535.7 (KHTML, like Gecko) Chrome/16.0.912.77 Safari/535.7",
+    "beos": "Mozilla/5.0 (BeOS; U; BeOS BePC; en-US; rv:1.9a1) Gecko/20060702 SeaMonkey/1.5a",
+    "os/2": "Mozilla/5.0 (OS/2; Warp 4.5; rv:31.0) Gecko/20100101 Firefox/31.0",
+    "bot": "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; Googlebot/2.1; +http://www.google.com/bot.html) Chrome/41.0.2272.96 Safari/537.36",
+}
+
+WINDOWS_VERSIONS = {
+    "10": "Windows NT 10.0",
+    "8.1": "Windows NT 6.3",
+    "8": "Windows NT 6.2",
+    "7": "Windows NT 6.1",
+    "vista": "Windows NT 6.0",
+    "server 2003": "Windows NT 5.2",
+    "xp": "Windows NT 5.1",
+    "2000": "Windows NT 5.0",
+    "me": "Windows ME",
+    "98": "Windows 98",
+    "95": "Windows 95",
+    "nt 4.0": "Windows NT 4.0",
+    "4.0": "Windows NT 4.0",
+    "ce": "Windows CE",
+    "3.11": "Win16",
+}
+
+_IPV4 = re.compile(r"^\d{1,3}(\.\d{1,3}){3}([:/].*)?$")
 
 
-if len(sys.argv) < 2: #no args
-	print("No arguments provided! Use ./browser help to view use")
-elif sys.argv[1].lower() == "help":
-	print(help)
-elif len(sys.argv) >= 2: #appropriate number of arguments provided
-	if len(sys.argv) == 2:
-		if sys.argv[1].lower() == "windows": #defaults to Windows 10
-			user_agent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36"
-		elif sys.argv[1].lower() == "linux":
-			 #assumed to be within a linux system (mininet only runs on linux)
-			user_agent_arg = ""
-			user_agent = ""
-		elif sys.argv[1].lower() == "android":
-			user_agent = "Mozilla/5.0 (Linux; U; Android 4.0.2; en-us; Galaxy Nexus Build/ICL53F) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30"
-		elif sys.argv[1].lower() == "open bsd":
-			user_agent = "Mozilla/5.0 (X11; U; OpenBSD arm; en-us) AppleWebKit/531.2 (KHTML, like Gecko) Safari/531.2 Epiphany/2.30.0"
-		elif sys.argv[1].lower() == "sun os":
-			user_agent = "Mozilla/5.0 (compatible; Konqueror/3.3; SunOS) (KHTML, like Gecko)"
-		elif sys.argv[1].lower() == "ios":
-			user_agent = "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/125.0.0.0 Mobile/15E148 Safari/604.1"
-		elif sys.argv[1].lower() == "mac os x":
-			user_agent = "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/125.0.0.0 Mobile/15E148 Safari/604.1"
-		elif sys.argv[1].lower() == "mac os":
-			user_agent = "Mozilla/5.0 (Macintosh; JAT-LX1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"
-		elif sys.argv[1].lower() == "qnx":
-			user_agent = "Mozilla/5.0 (QNX Neutrino 6.5.0; armle) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2182.0 Safari/537.36"
-		elif sys.argv[1].lower() == "unix":
-			user_agent = "Mozilla/5.0 (Unix) AppleWebKit/535.7 (KHTML, like Gecko) Chrome/16.0.912.77 Safari/535.7"
-		elif sys.argv[1].lower() == "beos":
-			user_agent = "Mozilla/5.0 (BeOS; U; BeOS BePC; en-US; rv:1.9a1) Gecko/20060702 SeaMonkey/1.5a"
-		elif sys.argv[1].lower() == "os/2":
-			user_agent = "Mozilla/5.0 (OS/2; Warp 4.5; rv:31.0) Gecko/20100101 Firefox/31.0"
-		elif sys.argv[1].lower() == "bot":
-			user_agent = "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; Googlebot/2.1; +http://www.google.com/bot.html) Chrome/41.0.2272.96 Safari/537.36"
-		else:
-			print(help)
-		os.system(f"{CHROME} {user_agent_arg}'{user_agent}' --no-sandbox")
-	elif sys.argv[1].lower() == "windows" and len(sys.argv) == 3: #operating version also included, windows only
-		if sys.argv[2].lower() == "10":
-			windows_version = "Windows NT 10.0"
-		elif sys.argv[2].lower() == "8.1":
-			windows_version = "Windows NT 6.3"
-		elif sys.argv[2].lower() == "8":
-			windows_version = "Windows NT 6.2"
-		elif sys.argv[2].lower() == "7":
-			windows_version = "Windows NT 6.1"
-		elif sys.argv[2].lower() == "vista":
-			windows_version = "Windows NT 6.0"
-		elif sys.argv[2].lower() == "server 2003":
-			windows_version = "Windows NT 5.2"
-		elif sys.argv[2].lower() == "xp":
-			windows_version = "Windows NT 5.1"
-		elif sys.argv[2].lower() == "2000":
-			windows_version = "Windows NT 5.0"
-		elif sys.argv[2].lower() == "me":
-			windows_version = "Windows ME"
-		elif sys.argv[2].lower() == "98":
-			windows_version = "Windows 98"
-		elif sys.argv[2].lower() == "95":
-			windows_version = "Windows 95"
-		elif sys.argv[2].lower() == "nt 4.0":
-			windows_version = "Windows NT 4.0"
-		elif sys.argv[2].lower() == "ce":
-			windows_version = "Windows CE"
-		elif sys.argv[2].lower() == "3.11":
-			windows_version = "Win16"
-		else:
-			print("invalid version, booting windows 10")
+class UsageError(Exception):
+    pass
 
-		os.system(f"{CHROME} --user-agent='Mozilla/5.0 (Windows {windows_version}; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36' --no-sandbox")
-	else:
-		print("invalid arguments")
-else:
-	print(help)
+
+def _looks_like_url(arg: str) -> bool:
+    # Windows versions such as "8.1" contain dots, so only treat an argument as
+    # a URL if it has a scheme, is an absolute path, or is a full IPv4 address.
+    return "://" in arg or arg.startswith("/") or bool(_IPV4.match(arg))
+
+
+def normalise_url(arg: str) -> str:
+    if arg.startswith("/"):
+        return "file://" + arg
+    if "://" not in arg:
+        return "http://" + arg
+    return arg
+
+
+def local_file_for(url: str) -> str | None:
+    """Return the filesystem path a file:// URL points at, else None."""
+    parsed = urlparse(url)
+    if parsed.scheme != "file":
+        return None
+    return unquote(parsed.path)
+
+
+def parse_args(argv: list[str]) -> tuple[str | None, str | None]:
+    """Return ``(user_agent, url)`` for a command line (without argv[0])."""
+    args = list(argv)
+    url = None
+    if args and _looks_like_url(args[-1]):
+        url = normalise_url(args.pop())
+    if not args:
+        raise UsageError("No user agent given (try: browser linux)")
+    os_name = args[0].lower()
+    if os_name not in USER_AGENTS:
+        raise UsageError(f"Unknown user agent option: {args[0]!r}")
+    if len(args) == 1:
+        return USER_AGENTS[os_name], url
+    if os_name == "windows" and len(args) == 2:
+        nt = WINDOWS_VERSIONS.get(args[1].lower())
+        if nt is None:
+            print(f"Unknown Windows version {args[1]!r}, using Windows 10")
+            nt = WINDOWS_VERSIONS["10"]
+        return _WIN_UA.format(nt=nt), url
+    raise UsageError("Too many arguments")
+
+
+def find_chrome() -> str | None:
+    return next((b for b in CHROME_CANDIDATES if shutil.which(b)), None)
+
+
+def build_command(chrome: str, user_agent: str | None, url: str | None, profile_dir: str) -> list[str]:
+    cmd = [
+        chrome,
+        "--no-sandbox",               # required when running as root
+        "--disable-dev-shm-usage",    # Docker's 64 MB /dev/shm crashes tabs otherwise
+        "--no-first-run",
+        "--no-default-browser-check",
+        f"--user-data-dir={profile_dir}",
+    ]
+    if user_agent:
+        cmd.append(f"--user-agent={user_agent}")
+    if url:
+        cmd.append(url)
+    return cmd
+
+
+def fix_x_auth(env: dict[str, str]) -> None:
+    """When run via sudo, borrow the desktop user's X cookie so root can draw."""
+    if env.get("XAUTHORITY") or os.geteuid() != 0:
+        return
+    user = env.get("SUDO_USER")
+    if not user or user == "root":
+        return
+    try:
+        home = pwd.getpwnam(user).pw_dir
+    except KeyError:
+        return
+    cookie = os.path.join(home, ".Xauthority")
+    if os.path.isfile(cookie):
+        env["XAUTHORITY"] = cookie
+
+
+def main(argv: list[str]) -> int:
+    if not argv or argv[0].lower() in ("help", "-h", "--help"):
+        print(__doc__)
+        return 0 if argv else 1
+    try:
+        user_agent, url = parse_args(argv)
+    except UsageError as exc:
+        print(f"browser: {exc}\n")
+        print(__doc__)
+        return 1
+
+    path = local_file_for(url) if url else None
+    if path is not None and not os.path.exists(path):
+        print(f"browser: file not found: {path}")
+        print("Check the path. Lab materials live in the 'materials' folder of your WifiForge")
+        print("checkout, e.g. /wififorge/src/wififorge/labs/materials/")
+        return 1
+
+    env = dict(os.environ)
+    if not env.get("DISPLAY") and not env.get("WAYLAND_DISPLAY"):
+        print("browser: no display found ($DISPLAY is not set).")
+        print("Docker: start the container with --env=DISPLAY and run 'xhost +local:root' on the host.")
+        print("Source install: run 'xhost +SI:localuser:root' in your desktop session, then relaunch the lab.")
+        return 1
+    fix_x_auth(env)
+
+    chrome = find_chrome()
+    if chrome is None:
+        print("No Chrome or Chromium browser found. Install one with: apt install chromium")
+        return 1
+
+    profile_dir = tempfile.mkdtemp(prefix="wififorge-browser-")
+    try:
+        return subprocess.call(build_command(chrome, user_agent, url, profile_dir), env=env)
+    except KeyboardInterrupt:
+        return 130
+    finally:
+        shutil.rmtree(profile_dir, ignore_errors=True)
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

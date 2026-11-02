@@ -30,6 +30,8 @@ export DEBIAN_FRONTEND=noninteractive
 MININET_WIFI_DIR="${MININET_WIFI_DIR:-/opt/mininet-wifi}"
 AIRGEDDON_DIR="${AIRGEDDON_DIR:-/opt/airgeddon-WifiForge-Cloud}"
 AIRGEDDON_REPO="https://github.com/JsphByd/airgeddon-WifiForge-Cloud.git"
+JOHN_JUMBO_DIR="${JOHN_JUMBO_DIR:-/opt/john-jumbo}"
+JOHN_JUMBO_REPO="https://github.com/openwall/john.git"
 
 # Install only what's missing; never upgrade packages that are already there
 # (the Docker base image ships a tuned mininet-wifi toolchain).
@@ -64,7 +66,8 @@ for pkg in \
     mdk4:"Airgeddon DoS" \
     wifiphisher:"Wifiphisher" \
     chromium:"Capture to HCCAPX / Hashcat, Wifiphisher (browser)" \
-    hashcat-utils:"Capture to HCCAPX / Hashcat"
+    hashcat-utils:"Capture to HCCAPX / Hashcat" \
+    pocl-opencl-icd:"Capture to HCCAPX / Hashcat on machines without a GPU"
 do
     name="${pkg%%:*}"
     if ! apt_install "${name}" >/dev/null 2>&1; then
@@ -85,18 +88,76 @@ else
     popd >/dev/null
 fi
 
+# The NTLM John lab needs John the Ripper "jumbo" (netntlm format, --mask).
+# Kali's john package is jumbo; Debian/Ubuntu ship the core build, which
+# rejects both. Build jumbo from source only when the installed john lacks it.
+john_has_netntlm() {
+    local formats
+    command -v john >/dev/null 2>&1 || return 1
+    formats="$(john --list=formats 2>/dev/null || true)"
+    grep -qi 'netntlm' <<<"${formats}"
+}
+
+build_john_jumbo() {
+    apt_install libssl-dev zlib1g-dev libbz2-dev libgmp-dev pkg-config || return 1
+    if [[ ! -d "${JOHN_JUMBO_DIR}/.git" ]]; then
+        git clone --depth 1 "${JOHN_JUMBO_REPO}" "${JOHN_JUMBO_DIR}" || return 1
+    fi
+    ( cd "${JOHN_JUMBO_DIR}/src" \
+        && ./configure --disable-native-tests \
+        && make -s clean \
+        && make -sj"$(nproc)" ) || return 1
+    # A wrapper, not a symlink: jumbo locates john.conf relative to the path it
+    # was started from, so a symlink in /usr/local/bin fails to find its config.
+    # /usr/local/bin precedes /usr/sbin (Debian's core john) on root's PATH.
+    rm -f /usr/local/bin/john
+    cat > /usr/local/bin/john <<JOHN
+#!/bin/sh
+exec "${JOHN_JUMBO_DIR}/run/john" "\$@"
+JOHN
+    chmod 755 /usr/local/bin/john
+    hash -r
+}
+
+if john_has_netntlm; then
+    echo "[*] John the Ripper (jumbo) is already installed, skipping."
+else
+    echo "[*] Installed john lacks the netntlm format; building John the Ripper jumbo into ${JOHN_JUMBO_DIR} (a few minutes)..."
+    if ! build_john_jumbo || ! john_has_netntlm; then
+        missing+=("John the Ripper jumbo (NTLM John Crack) - build failed, see output above")
+    fi
+fi
+
 echo "[*] Installing airgeddon (WifiForge build) into ${AIRGEDDON_DIR}..."
 if [[ -d "${AIRGEDDON_DIR}/.git" ]]; then
     git -C "${AIRGEDDON_DIR}" pull --ff-only || echo "[!] Could not update airgeddon; keeping existing copy."
 else
     git clone --depth 1 "${AIRGEDDON_REPO}" "${AIRGEDDON_DIR}"
 fi
-# Keep airgeddon from replacing the WifiForge build with upstream on launch.
+# Keep airgeddon from replacing the WifiForge build with upstream on launch, and
+# keep it in tmux mode: labs run inside tmux with no X display, and xterm mode
+# aborts with "No graphics system was detected".
 if [[ -f "${AIRGEDDON_DIR}/.airgeddonrc" ]]; then
     sed -i 's/^AIRGEDDON_AUTO_UPDATE=.*/AIRGEDDON_AUTO_UPDATE=false/' "${AIRGEDDON_DIR}/.airgeddonrc"
+    sed -i 's/^AIRGEDDON_WINDOWS_HANDLING=.*/AIRGEDDON_WINDOWS_HANDLING=tmux/' "${AIRGEDDON_DIR}/.airgeddonrc"
 fi
 chmod +x "${AIRGEDDON_DIR}/airgeddon.sh"
-ln -sf "${AIRGEDDON_DIR}/airgeddon.sh" /usr/local/bin/airgeddon
+# Launch through a wrapper rather than a symlink. airgeddon derives its own
+# folder from the directory of $0 without resolving the link, so a symlink in
+# /usr/local/bin made it look for .airgeddonrc and language_strings.sh in
+# /usr/local/bin: it then wrote a default rc (xterm mode, auto-update on),
+# failed the graphics check and tried to download upstream files.
+# Settings exported here take precedence over any .airgeddonrc or
+# /etc/airgeddonrc (e.g. one left by Kali's airgeddon package).
+rm -f /usr/local/bin/airgeddon   # never write through an old symlink
+cat > /usr/local/bin/airgeddon <<AIRGEDDON
+#!/usr/bin/env bash
+export AIRGEDDON_WINDOWS_HANDLING="\${AIRGEDDON_WINDOWS_HANDLING:-tmux}"
+export AIRGEDDON_AUTO_UPDATE="\${AIRGEDDON_AUTO_UPDATE:-false}"
+cd "${AIRGEDDON_DIR}" || exit 1
+exec bash ./airgeddon.sh "\$@"
+AIRGEDDON
+chmod 755 /usr/local/bin/airgeddon
 
 cat <<'MSG'
 

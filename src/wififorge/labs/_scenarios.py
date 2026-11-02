@@ -17,13 +17,20 @@ def standard_range(net: Any, attacker_wlans: int = 1) -> list:
     Networks created (all co-existing, as a messy real airspace would be):
 
     * ``WEP_Network``      — legacy WEP, two clients
-    * ``WPA2_Network``     — WPA2, two clients (fixed BSSID for reproducible labs)
+    * ``WPA2_Network``     — WPA2, two clients
     * ``Harlow_Home_Wifi`` — WPA2 home network, three clients
     * ``FBI_Van``          — WPA2 decoy, one client
     * ``cantseeme``        — hidden-SSID WPA2, one client
 
     Plus an ``Attacker`` station with ``attacker_wlans`` radios (one by default).
     Returns the AP list so the caller can ``build()`` then start each one.
+
+    MAC addresses are deliberately left to mac80211_hwsim, which numbers radios
+    in creation order (``02:00:00:00:NN:00``). With the default single attacker
+    radio that makes ``WPA2_Network``'s BSSID ``02:00:00:00:0b:00`` and ``host3``
+    ``02:00:00:00:03:00`` — the values the Airsuite walkthrough uses and the BSSID
+    recorded in ``loot/4whs-01.cap``. Do not pin ``mac=`` here: an explicit MAC
+    makes the walkthrough's ``--bssid`` filter match nothing.
     """
     net.addStation("Attacker", wlans=attacker_wlans)
 
@@ -40,7 +47,7 @@ def standard_range(net: Any, attacker_wlans: int = 1) -> list:
     host4 = net.addStation("host4", passwd="december2022", encrypt="wpa2")
     ap1 = net.addAccessPoint(
         "ap1", ssid="WPA2_Network", passwd="december2022", encrypt="wpa2",
-        mode="g", channel="6", mac="76:df:71:67:40:2b",
+        mode="g", channel="6",
     )
 
     # --- Home network ---------------------------------------------------------
